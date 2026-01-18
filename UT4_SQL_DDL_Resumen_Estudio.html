@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>UT4 - SQL (DDL) - Resumen para estudiar</title>
+    <style>
+      :root { --ink:#111827; --muted:#374151; --border:#e5e7eb; --chip:#f3f4f6; }
+      * { box-sizing: border-box; }
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        color: var(--ink);
+        margin: 18px;
+        line-height: 1.25;
+      }
+      h1 { font-size: 26px; margin: 0 0 8px; }
+      h2 { font-size: 16px; margin: 14px 0 8px; padding-top: 8px; border-top: 1px solid var(--border); page-break-after: avoid; }
+      p { margin: 8px 0; color: var(--muted); }
+      ul { margin: 6px 0 10px 18px; }
+      li { margin: 3px 0; }
+      .card { border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
+      .chip { display: inline-block; background: var(--chip); border: 1px solid var(--border); padding: 2px 8px; border-radius: 999px; font-size: 12px; margin-right: 6px; }
+      pre {
+        background: #f8fafc;
+        color: #111827;
+        border: 1px solid var(--border);
+        padding: 10px 12px;
+        border-radius: 10px;
+        overflow: hidden;
+        font-family: Consolas, "Courier New", monospace;
+        font-size: 11px;
+        line-height: 1.25;
+        white-space: pre-wrap;
+      }
+      .small { font-size: 12px; color: var(--muted); }
+      .avoidBreak { break-inside: avoid; page-break-inside: avoid; }
+    </style>
+  </head>
+  <body>
+    <h1>UT4 - SQL (DDL en Oracle) - Resumen para estudiar</h1>
+    <p class="small">Idea clave: DDL define reglas/estructura; DML prueba si se cumplen (inserts que pasan y que fallan).</p>
+
+    <div class="card avoidBreak">
+      <h2>1) SQL en 30 segundos</h2>
+      <ul>
+        <li><span class="chip">DML</span> datos: <b>SELECT</b>, <b>INSERT</b>, <b>UPDATE</b>, <b>DELETE</b></li>
+        <li><span class="chip">DDL</span> estructura/objetos: <b>CREATE</b>, <b>ALTER</b>, <b>DROP</b>, <b>TRUNCATE</b>, <b>RENAME</b></li>
+        <li><span class="chip">DCL/TCL</span> permisos + transacciones: <b>GRANT</b>, <b>REVOKE</b>, <b>COMMIT</b>, <b>ROLLBACK</b></li>
+      </ul>
+    </div>
+
+    <div class="card avoidBreak" style="margin-top:12px;">
+      <h2>2) Conceptos (Oracle)</h2>
+      <ul>
+        <li><b>Usuario</b>: cuenta con permisos.</li>
+        <li><b>Esquema</b>: objetos de un usuario (tablas, vistas, indices...).</li>
+        <li><b>Objetos</b>: TABLE, VIEW, INDEX, SYNONYM.</li>
+      </ul>
+    </div>
+
+    <h2>3) CREATE TABLE (plantillas)</h2>
+    <pre>CREATE TABLE TABLA (
+  COL1 TIPO,
+  COL2 TIPO
+);</pre>
+
+    <pre>CREATE TABLE DEPT (
+  DEPTNO  NUMBER(2)    CONSTRAINT DEPT_PK PRIMARY KEY,
+  DNOMBRE VARCHAR2(30) CONSTRAINT DEPT_DNOMBRE_NN NOT NULL,
+  LOC     VARCHAR2(30) DEFAULT 'MADRID',
+  ACTIVO  CHAR(1) DEFAULT 'S' CONSTRAINT DEPT_ACTIVO_CK CHECK (ACTIVO IN ('S','N'))
+);</pre>
+
+    <h2>4) Constraints (lo mas importante)</h2>
+    <div class="card avoidBreak">
+      <ul>
+        <li><b>NOT NULL (NN)</b>: obliga a valor.</li>
+        <li><b>UNIQUE (UQ)</b>: no repetidos (suele permitir NULL).</li>
+        <li><b>PRIMARY KEY (PK)</b>: identifica fila = UQ + NN (solo 1 PK por tabla).</li>
+        <li><b>FOREIGN KEY (FK)</b>: relacion entre tablas (padre debe tener PK/UQ).</li>
+        <li><b>CHECK (CK)</b>: valida regla (rangos, IN...).</li>
+        <li><b>DEFAULT</b>: valor si no se indica en el INSERT.</li>
+      </ul>
+      <p class="small"><b>Columna vs Tabla</b>: columna (1 col) / tabla (compuestas, al final).<br/>
+      <b>FK y ON DELETE</b>: <b>CASCADE</b> borra hijos; <b>SET NULL</b> pone FK a NULL (no puede ser NOT NULL).</p>
+    </div>
+
+    <h2>5) ALTER TABLE (operaciones tipicas)</h2>
+    <pre>ALTER TABLE T ADD (NUEVA_COL VARCHAR2(50));
+ALTER TABLE T MODIFY (NUEVA_COL VARCHAR2(120));
+ALTER TABLE T RENAME COLUMN VIEJA TO NUEVA;
+ALTER TABLE T DROP COLUMN NUEVA_COL;</pre>
+
+    <pre>ALTER TABLE T ADD CONSTRAINT T_EMAIL_UQ UNIQUE (EMAIL);
+ALTER TABLE T ADD CONSTRAINT T_SAL_CK CHECK (SALARIO &gt;= 0);
+ALTER TABLE T DROP CONSTRAINT T_EMAIL_UQ;
+ALTER TABLE T DISABLE CONSTRAINT T_SAL_CK;
+ALTER TABLE T ENABLE CONSTRAINT T_SAL_CK;</pre>
+    <p class="small">Error tipico: <b>MODIFY ... NOT NULL</b> falla si ya hay filas con NULL.</p>
+
+    <h2>6) DROP vs TRUNCATE vs RENAME</h2>
+    <ul class="avoidBreak">
+      <li><b>DROP TABLE</b>: elimina la tabla (estructura). Tip: <b>CASCADE CONSTRAINTS</b>.</li>
+      <li><b>TRUNCATE TABLE</b>: elimina TODAS las filas, mantiene estructura (rapido).</li>
+      <li><b>RENAME</b>: renombra un objeto.</li>
+    </ul>
+
+    <h2>7) Indices / Vistas / Sinonimos</h2>
+    <div class="card avoidBreak">
+      <p class="small"><b>Indice</b> (acelera lecturas; encarece escrituras)</p>
+      <pre>CREATE INDEX EMP_APELLIDO_IX ON EMP (APELLIDO);
+DROP INDEX EMP_APELLIDO_IX;</pre>
+      <p class="small"><b>Vista</b> (simplifica JOINs)</p>
+      <pre>CREATE OR REPLACE VIEW V_EMP_DEPT AS
+SELECT e.EMPNO, e.APELLIDO, d.DNOMBRE
+FROM EMP e
+JOIN DEPT d ON d.DEPTNO = e.DEPTNO;</pre>
+      <p class="small"><b>Sinonimo</b> (alias a un objeto)</p>
+      <pre>CREATE SYNONYM EMP_ALIAS FOR EMP;
+DROP SYNONYM EMP_ALIAS;</pre>
+    </div>
+
+    <h2>8) Errores tipicos (como pensar)</h2>
+    <ul>
+      <li><b>FK</b>: insertas hijo con padre inexistente - crea padre primero o corrige clave.</li>
+      <li><b>NOT NULL</b>: faltan datos obligatorios.</li>
+      <li><b>PK/UNIQUE</b>: valor repetido - cambia dato o revisa clave.</li>
+      <li><b>CHECK</b>: regla de negocio no se cumple - revisa rango/IN.</li>
+    </ul>
+
+    <h2>9) Checklist para examen</h2>
+    <ul class="avoidBreak">
+      <li>Crear tabla con constraints nombradas.</li>
+      <li>Distinguir PK vs UQ vs NN.</li>
+      <li>Crear FK correcta y entender ON DELETE.</li>
+      <li>ALTER (add/modify/drop/rename + add/drop constraint).</li>
+      <li>Explicar DROP vs TRUNCATE.</li>
+      <li>Crear INDEX y justificar.</li>
+      <li>Crear VIEW.</li>
+      <li>Crear SYNONYM (si procede).</li>
+    </ul>
+  </body>
+</html>

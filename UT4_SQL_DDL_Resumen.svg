@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="850" viewBox="0 0 1200 850">
+  <defs>
+    <style>
+      .title { font: 700 28px Arial, Helvetica, sans-serif; fill: #111827; }
+      .subtitle { font: 400 14px Arial, Helvetica, sans-serif; fill: #374151; }
+      .boxTitle { font: 700 16px Arial, Helvetica, sans-serif; fill: #111827; }
+      .text { font: 400 14px Arial, Helvetica, sans-serif; fill: #111827; }
+      .muted { font: 400 13px Arial, Helvetica, sans-serif; fill: #374151; }
+      .tiny { font: 400 12px Arial, Helvetica, sans-serif; fill: #4b5563; }
+      .box { fill: #ffffff; stroke: #111827; stroke-width: 1.2; rx: 10; }
+      .boxBlue { fill: #eff6ff; stroke: #1d4ed8; stroke-width: 1.2; rx: 10; }
+      .boxGreen { fill: #ecfdf5; stroke: #047857; stroke-width: 1.2; rx: 10; }
+      .boxAmber { fill: #fffbeb; stroke: #b45309; stroke-width: 1.2; rx: 10; }
+      .arrow { stroke: #111827; stroke-width: 1.6; fill: none; marker-end: url(#arrowHead); }
+      .dash { stroke-dasharray: 6 4; }
+    </style>
+    <marker id="arrowHead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#111827"/>
+    </marker>
+  </defs>
+
+  <!-- Header -->
+  <text x="40" y="55" class="title">UT4 - SQL (DDL) - Esquema resumen</text>
+  <text x="40" y="80" class="subtitle">Objetivo: entender DDL y practicar CREATE/ALTER/DROP/TRUNCATE/RENAME + constraints, indices, vistas y sinonimos.</text>
+
+  <!-- SQL Families -->
+  <rect x="40" y="115" width="1120" height="120" class="box"/>
+  <text x="60" y="145" class="boxTitle">SQL: 3 familias</text>
+
+  <rect x="60" y="160" width="340" height="60" class="boxGreen"/>
+  <text x="80" y="190" class="boxTitle">DML</text>
+  <text x="140" y="190" class="text">SELECT / INSERT / UPDATE / DELETE</text>
+  <text x="80" y="212" class="tiny">Datos dentro de tablas (comprobar constraints)</text>
+
+  <rect x="430" y="160" width="340" height="60" class="boxBlue"/>
+  <text x="450" y="190" class="boxTitle">DDL</text>
+  <text x="510" y="190" class="text">CREATE / ALTER / DROP / TRUNCATE / RENAME</text>
+  <text x="450" y="212" class="tiny">Estructura y objetos (metadatos)</text>
+
+  <rect x="800" y="160" width="340" height="60" class="boxAmber"/>
+  <text x="820" y="190" class="boxTitle">DCL/TCL</text>
+  <text x="905" y="190" class="text">GRANT / REVOKE / COMMIT / ROLLBACK</text>
+  <text x="820" y="212" class="tiny">Permisos y transacciones (segun temario)</text>
+
+  <!-- DDL Core -->
+  <rect x="40" y="260" width="1120" height="530" class="box"/>
+  <text x="60" y="290" class="boxTitle">DDL (lo que cae y lo que se practica)</text>
+
+  <!-- Left column: Objects -->
+  <rect x="60" y="310" width="350" height="220" class="box"/>
+  <text x="80" y="340" class="boxTitle">Objetos</text>
+  <text x="80" y="368" class="text">TABLE</text>
+  <text x="160" y="368" class="muted">estructura de datos</text>
+  <text x="80" y="392" class="text">VIEW</text>
+  <text x="160" y="392" class="muted">tabla virtual (JOINs y simplificacion)</text>
+  <text x="80" y="416" class="text">INDEX</text>
+  <text x="160" y="416" class="muted">acelera busquedas (coste en escrituras)</text>
+  <text x="80" y="440" class="text">SYNONYM</text>
+  <text x="160" y="440" class="muted">alias a un objeto (util con esquemas)</text>
+  <text x="80" y="476" class="tiny">Idea clave: el usuario posee objetos; el conjunto es el ESQUEMA.</text>
+  <text x="80" y="498" class="tiny">DDL es potente: usa scripts y lee errores de constraints.</text>
+
+  <!-- Middle column: Table Design -->
+  <rect x="430" y="310" width="360" height="220" class="boxBlue"/>
+  <text x="450" y="340" class="boxTitle">CREATE TABLE (diseno)</text>
+  <text x="450" y="368" class="text">1) Columnas + tipos</text>
+  <text x="470" y="390" class="tiny">NUMBER(p,s), VARCHAR2(n), CHAR(n), DATE</text>
+  <text x="450" y="418" class="text">2) Constraints (reglas)</text>
+  <text x="470" y="440" class="tiny">NN, UQ, PK, FK, CHECK, DEFAULT</text>
+  <text x="450" y="468" class="text">3) Probar con DML</text>
+  <text x="470" y="490" class="tiny">inserts que PASEN y que FALLEN (error explicado)</text>
+
+  <!-- Right column: DDL commands -->
+  <rect x="810" y="310" width="330" height="220" class="box"/>
+  <text x="830" y="340" class="boxTitle">Comandos DDL</text>
+  <text x="830" y="368" class="text">CREATE</text>
+  <text x="920" y="368" class="muted">crea objetos</text>
+  <text x="830" y="392" class="text">ALTER</text>
+  <text x="920" y="392" class="muted">evoluciona estructura</text>
+  <text x="830" y="416" class="text">DROP</text>
+  <text x="920" y="416" class="muted">elimina objeto (ojo dependencias)</text>
+  <text x="830" y="440" class="text">TRUNCATE</text>
+  <text x="920" y="440" class="muted">borra filas, mantiene tabla</text>
+  <text x="830" y="464" class="text">RENAME</text>
+  <text x="920" y="464" class="muted">renombra</text>
+  <text x="830" y="498" class="tiny">Tip: DROP TABLE ... CASCADE CONSTRAINTS</text>
+
+  <!-- Constraints deep -->
+  <rect x="60" y="550" width="530" height="220" class="boxGreen"/>
+  <text x="80" y="580" class="boxTitle">Constraints (resumen rapido)</text>
+  <text x="80" y="606" class="text">NOT NULL (NN)</text>
+  <text x="230" y="606" class="muted">obliga a valor</text>
+  <text x="80" y="630" class="text">UNIQUE (UQ)</text>
+  <text x="230" y="630" class="muted">no repetidos (NULL permitido)</text>
+  <text x="80" y="654" class="text">PRIMARY KEY (PK)</text>
+  <text x="230" y="654" class="muted">identifica fila (UQ + NN)</text>
+  <text x="80" y="678" class="text">FOREIGN KEY (FK)</text>
+  <text x="230" y="678" class="muted">relacion + integridad</text>
+  <text x="80" y="702" class="text">CHECK (CK)</text>
+  <text x="230" y="702" class="muted">valida regla (rangos, IN, etc.)</text>
+  <text x="80" y="726" class="text">DEFAULT</text>
+  <text x="230" y="726" class="muted">valor por defecto</text>
+  <text x="80" y="754" class="tiny">Nivel columna vs tabla: PK/FK compuestas suelen ir al final.</text>
+
+  <!-- ALTER deep -->
+  <rect x="610" y="550" width="530" height="220" class="boxAmber"/>
+  <text x="630" y="580" class="boxTitle">ALTER TABLE (operaciones tipicas)</text>
+  <text x="630" y="606" class="text">ADD</text>
+  <text x="720" y="606" class="muted">nueva columna o constraint</text>
+  <text x="630" y="630" class="text">MODIFY</text>
+  <text x="720" y="630" class="muted">tipo / NOT NULL (si no hay NULLs)</text>
+  <text x="630" y="654" class="text">DROP COLUMN</text>
+  <text x="720" y="654" class="muted">borra columna (ojo datos)</text>
+  <text x="630" y="678" class="text">ADD CONSTRAINT</text>
+  <text x="820" y="678" class="muted">UQ/CK/FK/PK</text>
+  <text x="630" y="702" class="text">DROP CONSTRAINT</text>
+  <text x="820" y="702" class="muted">elimina regla</text>
+  <text x="630" y="726" class="text">ENABLE/DISABLE</text>
+  <text x="820" y="726" class="muted">activa/desactiva regla</text>
+  <text x="630" y="754" class="tiny">Siempre validar con inserts antes y despues del cambio.</text>
+
+  <!-- Connectors -->
+  <path d="M 600 220 L 600 260" class="arrow"/>
+  <path d="M 610 420 L 810 420" class="arrow dash"/>
+  <text x="635" y="410" class="tiny">DDL crea/usa</text>
+
+  <path d="M 610 470 L 610 550" class="arrow dash"/>
+  <text x="630" y="520" class="tiny">constraints</text>
+</svg>
+
