@@ -1,0 +1,12 @@
+{
+    "code-runner.executorMap": {
+        "java": "cd $dir && java $fileName"
+    },
+    "code-runner.clearPreviousOutput": true,
+    "code-runner.saveFileBeforeRun": true,
+    "code-runner.showExecutionMessage": false,
+    "files.exclude": {
+        "**/*.class": true
+    },
+    "java.debug.settings.enableRunDebugCodeLens": false
+}
