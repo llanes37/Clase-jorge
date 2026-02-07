@@ -17,26 +17,26 @@ public class UT6_AtributosMetodosEstaticos {
         // * MENÚ PRINCIPAL - Permite al usuario elegir qué concepto explorar
         do {
             System.out.println("\n⚡ MENÚ - ATRIBUTOS Y MÉTODOS ESTÁTICOS:");
-            System.out.println("1. 📊 Ver diferencia entre STATIC y NO STATIC");
-            System.out.println("2. 🔢 Contador de instancias (atributo estático)");
-            System.out.println("3. 📐 Usar constantes estáticas (final static)");
-            System.out.println("4. 🧮 Métodos estáticos de utilidad (calculadora)");
-            System.out.println("5. 🏗️ Bloque estático de inicialización");
-            System.out.println("6. 🎯 Patrón Singleton (solo una instancia)");
-            System.out.println("7. 📋 Resumen teórico completo");
+            System.out.println("1. Ver diferencia entre STATIC y NO STATIC");
+            System.out.println("2. Contador de instancias (atributo estático)");
+            System.out.println("3. Usar constantes estáticas (final static)");
+            System.out.println("4. Métodos estáticos de utilidad (calculadora)");
+            System.out.println("5. Bloque estático de inicialización");
+            System.out.println("6. Patrón Singleton (solo una instancia)");
+            System.out.println("7. Resumen teórico completo");
             System.out.println("0. Salir");
             System.out.print("👉 Elige una opción: ");
             opcion = sc.nextInt();        // 📥 Lee la opción seleccionada
             sc.nextLine();                // 🧹 Limpia el buffer tras leer número
 
             switch (opcion) {
-                case 1 -> ejemploDiferenciaStaticNoStatic();
+                case 1 -> ejemploStaticVsNoStatic();
                 case 2 -> ejemploContadorInstancias();
-                case 3 -> ejemploConstantesEstaticas();
-                case 4 -> ejemploMetodosEstaticosUtilidad(sc);
-                case 5 -> ejemploBloqueEstatico();
-                case 6 -> ejemploPatronSingleton();
-                case 7 -> mostrarResumenTeorico();
+                case 3 -> ejemploConstantes();
+                case 4 -> ejemploMetodosEstaticos(sc);
+                case 5 -> ejemploBloqueStatic();
+                case 6 -> ejemploSingleton();
+                case 7 -> mostrarResumen();
                 case 0 -> System.out.println("👋 ¡Saliendo del programa!");
                 default -> System.out.println("⚠️ Opción no válida.");
             }
@@ -45,488 +45,312 @@ public class UT6_AtributosMetodosEstaticos {
         sc.close(); // 🔐 Cerramos el Scanner al terminar
     }
 
-    // ═══════════════════════════════════════════════════════════════════════════════════
-    // *                    EJEMPLO 1: DIFERENCIA ENTRE STATIC Y NO STATIC
-    // ═══════════════════════════════════════════════════════════════════════════════════
-
     // * 📖 TEORÍA: ¿Qué significa STATIC?
-    // ──────────────────────────────────────────────────────────────────────────────────
-    // ? STATIC = Pertenece a la CLASE, no a cada objeto individual
-    // ? NO STATIC = Pertenece a cada OBJETO (instancia) de la clase
-    // ?
-    // ? Imagina una clase "Alumno":
-    // ?   - nombreAlumno → NO STATIC (cada alumno tiene su propio nombre)
-    // ?   - contadorAlumnos → STATIC (es compartido por TODOS los alumnos)
-    // ──────────────────────────────────────────────────────────────────────────────────
-
-    public static void ejemploDiferenciaStaticNoStatic() {
-        System.out.println("\n" + "═".repeat(70));
-        System.out.println("📊 EJEMPLO 1: DIFERENCIA ENTRE STATIC Y NO STATIC");
-        System.out.println("═".repeat(70));
-
-        // ? Creamos varios objetos de la clase Coche
-        Coche coche1 = new Coche("Toyota", "Rojo");
-        Coche coche2 = new Coche("Ford", "Azul");
-        Coche coche3 = new Coche("BMW", "Negro");
-
-        System.out.println("\n🚗 Hemos creado 3 coches diferentes:");
+    // ──────────────────────────────────────────────
+    // ? STATIC = Pertenece a la CLASE, no a cada objeto.
+    // ? NO STATIC = Pertenece a cada OBJETO individual.
+    public static void ejemploStaticVsNoStatic() {
+        System.out.println("\n📊 EJEMPLO 1: STATIC vs NO STATIC");
         System.out.println("──────────────────────────────────────");
 
-        // ? Cada coche tiene sus PROPIOS atributos (no static)
+        Coche coche1 = new Coche("Toyota", "Rojo");   // 🚗 Creamos coche 1
+        Coche coche2 = new Coche("Ford", "Azul");     // 🚗 Creamos coche 2
+        Coche coche3 = new Coche("BMW", "Negro");     // 🚗 Creamos coche 3
+
+        System.out.println("\n🚗 Atributos NO STATIC (diferentes para cada coche):");
         System.out.println("Coche 1: " + coche1.marca + " - " + coche1.color);
         System.out.println("Coche 2: " + coche2.marca + " - " + coche2.color);
         System.out.println("Coche 3: " + coche3.marca + " - " + coche3.color);
 
-        // ? Pero TODOS comparten el mismo contador (static)
-        System.out.println("\n📊 Atributo ESTÁTICO (compartido por todos):");
-        System.out.println("──────────────────────────────────────");
-        System.out.println("Total de coches creados: " + Coche.totalCoches);
+        System.out.println("\n📊 Atributo STATIC (compartido por todos):");
+        System.out.println("Total coches creados: " + Coche.totalCoches);
 
-        // ? Se accede con NombreClase.atributo (no con objeto.atributo)
-        System.out.println("\n💡 IMPORTANTE:");
-        System.out.println("   - Los atributos NO STATIC son únicos para cada objeto");
-        System.out.println("   - Los atributos STATIC son compartidos por TODOS los objetos");
-        System.out.println("   - Se accede a STATIC con: NombreClase.atributo");
+        System.out.println("\n💡 RECUERDA:");
+        System.out.println("   - NO STATIC: cada objeto tiene su copia");
+        System.out.println("   - STATIC: todos comparten el mismo valor");
+        System.out.println("   - Se accede con: NombreClase.atributo");
 
         // ! ✅ TAREA ALUMNO:
-        // * Crea 2 coches más y comprueba cómo cambia el contador totalCoches
+        // * Crea 2 coches más y mira cómo cambia totalCoches
     }
-
-    // ═══════════════════════════════════════════════════════════════════════════════════
-    // *                    EJEMPLO 2: CONTADOR DE INSTANCIAS
-    // ═══════════════════════════════════════════════════════════════════════════════════
 
     // * 📖 TEORÍA: Contador de instancias
-    // ──────────────────────────────────────────────────────────────────────────────────
-    // ? Un uso clásico de atributos estáticos es contar cuántos objetos se han creado.
-    // ? Cada vez que se crea un objeto, el constructor incrementa el contador.
-    // ? Como es STATIC, el valor se mantiene entre todas las instancias.
-    // ──────────────────────────────────────────────────────────────────────────────────
-
+    // ──────────────────────────────────────────────
+    // ? Usamos atributos STATIC para contar objetos creados.
+    // ? El contador se incrementa en el constructor.
     public static void ejemploContadorInstancias() {
-        System.out.println("\n" + "═".repeat(70));
-        System.out.println("🔢 EJEMPLO 2: CONTADOR DE INSTANCIAS CON STATIC");
-        System.out.println("═".repeat(70));
+        System.out.println("\n🔢 EJEMPLO 2: CONTADOR DE INSTANCIAS");
+        System.out.println("──────────────────────────────────────");
 
-        // ? Reseteamos el contador para esta demo
-        Alumno.resetearContador();
+        Alumno.resetearContador(); // 🔄 Reseteamos para la demo
 
-        System.out.println("\n📚 Creando alumnos para el curso...\n");
-
-        // ? Cada vez que creamos un Alumno, el contador aumenta automáticamente
-        Alumno a1 = new Alumno("María García", 20);
+        Alumno a1 = new Alumno("María García", 20);  // 📚 Creamos alumno 1
         System.out.println("✅ Creado: " + a1.getNombre() + " (ID: " + a1.getId() + ")");
-        System.out.println("   Total alumnos hasta ahora: " + Alumno.getTotalAlumnos());
+        System.out.println("   Total alumnos: " + Alumno.getTotalAlumnos());
 
-        Alumno a2 = new Alumno("Juan López", 22);
+        Alumno a2 = new Alumno("Juan López", 22);    // 📚 Creamos alumno 2
         System.out.println("✅ Creado: " + a2.getNombre() + " (ID: " + a2.getId() + ")");
-        System.out.println("   Total alumnos hasta ahora: " + Alumno.getTotalAlumnos());
+        System.out.println("   Total alumnos: " + Alumno.getTotalAlumnos());
 
-        Alumno a3 = new Alumno("Ana Martínez", 19);
+        Alumno a3 = new Alumno("Ana Martínez", 19);  // 📚 Creamos alumno 3
         System.out.println("✅ Creado: " + a3.getNombre() + " (ID: " + a3.getId() + ")");
-        System.out.println("   Total alumnos hasta ahora: " + Alumno.getTotalAlumnos());
+        System.out.println("   Total alumnos: " + Alumno.getTotalAlumnos());
 
         System.out.println("\n📊 RESUMEN:");
-        System.out.println("──────────────────────────────────────");
-        System.out.println("Total de alumnos matriculados: " + Alumno.getTotalAlumnos());
-        System.out.println("Cada alumno tiene un ID único asignado automáticamente");
+        System.out.println("Total matriculados: " + Alumno.getTotalAlumnos());
+        System.out.println("Cada alumno tiene ID único asignado automáticamente");
 
         // ! ✅ TAREA ALUMNO:
-        // * Añade un método estático getPromedioEdad() que calcule la media de edad
+        // * Crea un método estático getPromedioEdad()
     }
 
-    // ═══════════════════════════════════════════════════════════════════════════════════
-    // *                    EJEMPLO 3: CONSTANTES ESTÁTICAS (final static)
-    // ═══════════════════════════════════════════════════════════════════════════════════
-
-    // * 📖 TEORÍA: Constantes con final static
-    // ──────────────────────────────────────────────────────────────────────────────────
-    // ? final = El valor NO puede cambiar después de asignarse
-    // ? static = Pertenece a la clase, no a cada objeto
-    // ? final static = CONSTANTE de la clase (convención: MAYÚSCULAS_CON_GUIONES)
-    // ?
-    // ? Ejemplos conocidos: Math.PI, Integer.MAX_VALUE, Color.RED
-    // ──────────────────────────────────────────────────────────────────────────────────
-
-    public static void ejemploConstantesEstaticas() {
-        System.out.println("\n" + "═".repeat(70));
-        System.out.println("📐 EJEMPLO 3: CONSTANTES ESTÁTICAS (final static)");
-        System.out.println("═".repeat(70));
-
-        System.out.println("\n🔢 Constantes matemáticas (clase Constantes):");
+    // * 📖 TEORÍA: Constantes (final static)
+    // ──────────────────────────────────────────────
+    // ? final = El valor no puede cambiar.
+    // ? static = Pertenece a la clase.
+    // ? Convención: MAYUSCULAS_CON_GUIONES
+    public static void ejemploConstantes() {
+        System.out.println("\n📐 EJEMPLO 3: CONSTANTES (final static)");
         System.out.println("──────────────────────────────────────");
+
+        System.out.println("\n🔢 Constantes matemáticas:");
         System.out.println("PI = " + Constantes.PI);
-        System.out.println("E (número de Euler) = " + Constantes.E);
-        System.out.println("Gravedad terrestre = " + Constantes.GRAVEDAD + " m/s²");
+        System.out.println("E = " + Constantes.E);
+        System.out.println("GRAVEDAD = " + Constantes.GRAVEDAD + " m/s²");
 
-        System.out.println("\n🎨 Constantes de configuración:");
-        System.out.println("──────────────────────────────────────");
-        System.out.println("Nombre de la aplicación: " + Constantes.NOMBRE_APP);
+        System.out.println("\n🎨 Constantes de la aplicación:");
+        System.out.println("Nombre: " + Constantes.NOMBRE_APP);
         System.out.println("Versión: " + Constantes.VERSION);
-        System.out.println("Máx. usuarios permitidos: " + Constantes.MAX_USUARIOS);
+        System.out.println("Máx usuarios: " + Constantes.MAX_USUARIOS);
 
-        // ? Ejemplo práctico: calcular área de círculo
-        double radio = 5.0;
-        double area = Constantes.PI * radio * radio;
-        System.out.println("\n🔵 Cálculo usando constantes:");
-        System.out.println("──────────────────────────────────────");
-        System.out.println("Radio del círculo: " + radio);
+        double radio = 5.0;                                  // 🔵 Radio del círculo
+        double area = Constantes.PI * radio * radio;         // 📐 Calculamos área
+        System.out.println("\n🔵 Cálculo con constantes:");
+        System.out.println("Radio = " + radio);
         System.out.println("Área = PI * r² = " + area);
 
-        System.out.println("\n💡 VENTAJAS de usar constantes:");
-        System.out.println("   1. El valor está en UN solo lugar (fácil de cambiar)");
-        System.out.println("   2. Código más legible (GRAVEDAD vs 9.81)");
-        System.out.println("   3. El compilador avisa si intentas cambiar el valor");
+        System.out.println("\n💡 VENTAJAS:");
+        System.out.println("   1. Valor en UN solo lugar");
+        System.out.println("   2. Código más legible");
+        System.out.println("   3. El compilador protege el valor");
 
         // ! ✅ TAREA ALUMNO:
-        // * Añade una constante VELOCIDAD_LUZ = 299792458 y úsala en un cálculo
+        // * Añade VELOCIDAD_LUZ = 299792458 y úsala
     }
-
-    // ═══════════════════════════════════════════════════════════════════════════════════
-    // *                    EJEMPLO 4: MÉTODOS ESTÁTICOS DE UTILIDAD
-    // ═══════════════════════════════════════════════════════════════════════════════════
 
     // * 📖 TEORÍA: Métodos estáticos
-    // ──────────────────────────────────────────────────────────────────────────────────
-    // ? Un método STATIC se puede llamar SIN crear un objeto de la clase.
-    // ? Se llama con: NombreClase.nombreMetodo()
-    // ?
-    // ? Son ideales para:
-    // ?   - Funciones de utilidad (Math.sqrt(), Integer.parseInt())
-    // ?   - Operaciones que no dependen del estado de un objeto
-    // ?   - Métodos que trabajan solo con sus parámetros
-    // ?
-    // ? ⚠️ IMPORTANTE: Un método static NO puede usar atributos NO static de la clase
-    // ──────────────────────────────────────────────────────────────────────────────────
-
-    public static void ejemploMetodosEstaticosUtilidad(Scanner sc) {
-        System.out.println("\n" + "═".repeat(70));
-        System.out.println("🧮 EJEMPLO 4: MÉTODOS ESTÁTICOS DE UTILIDAD");
-        System.out.println("═".repeat(70));
-
-        System.out.println("\n📊 Nuestra clase Calculadora tiene métodos estáticos:");
+    // ──────────────────────────────────────────────
+    // ? Se llaman con: NombreClase.metodo()
+    // ? NO necesitan crear un objeto.
+    // ? NO pueden usar atributos de instancia.
+    public static void ejemploMetodosEstaticos(Scanner sc) {
+        System.out.println("\n🧮 EJEMPLO 4: MÉTODOS ESTÁTICOS");
         System.out.println("──────────────────────────────────────");
-        System.out.println("Se llaman con Calculadora.metodo() - ¡SIN crear objeto!");
 
-        // ? Usamos métodos estáticos SIN crear un objeto Calculadora
-        System.out.println("\n🔢 Ejemplos de uso:");
-        System.out.println("Calculadora.sumar(10, 5) = " + Calculadora.sumar(10, 5));
-        System.out.println("Calculadora.restar(10, 5) = " + Calculadora.restar(10, 5));
-        System.out.println("Calculadora.multiplicar(10, 5) = " + Calculadora.multiplicar(10, 5));
-        System.out.println("Calculadora.dividir(10, 5) = " + Calculadora.dividir(10, 5));
-        System.out.println("Calculadora.esParImpar(7) = " + Calculadora.esParImpar(7));
-        System.out.println("Calculadora.esPrimo(17) = " + Calculadora.esPrimo(17));
-        System.out.println("Calculadora.factorial(5) = " + Calculadora.factorial(5));
+        System.out.println("\n📊 Ejemplos de uso:");
+        System.out.println("sumar(10, 5) = " + Calculadora.sumar(10, 5));
+        System.out.println("restar(10, 5) = " + Calculadora.restar(10, 5));
+        System.out.println("multiplicar(10, 5) = " + Calculadora.multiplicar(10, 5));
+        System.out.println("dividir(10, 5) = " + Calculadora.dividir(10, 5));
+        System.out.println("esParImpar(7) = " + Calculadora.esParImpar(7));
+        System.out.println("esPrimo(17) = " + Calculadora.esPrimo(17));
+        System.out.println("factorial(5) = " + Calculadora.factorial(5));
 
-        // ? Mini calculadora interactiva
-        System.out.println("\n🎮 PRUEBA TÚ - Introduce dos números:");
-        System.out.print("   Primer número: ");
-        double num1 = sc.nextDouble();
-        System.out.print("   Segundo número: ");
-        double num2 = sc.nextDouble();
+        System.out.println("\n🎮 PRUEBA TÚ:");
+        System.out.print("Primer número: ");
+        double num1 = sc.nextDouble();              // 📥 Leemos primer número
+        System.out.print("Segundo número: ");
+        double num2 = sc.nextDouble();              // 📥 Leemos segundo número
 
         System.out.println("\n📊 Resultados:");
-        System.out.println("   " + num1 + " + " + num2 + " = " + Calculadora.sumar(num1, num2));
-        System.out.println("   " + num1 + " - " + num2 + " = " + Calculadora.restar(num1, num2));
-        System.out.println("   " + num1 + " * " + num2 + " = " + Calculadora.multiplicar(num1, num2));
+        System.out.println(num1 + " + " + num2 + " = " + Calculadora.sumar(num1, num2));
+        System.out.println(num1 + " - " + num2 + " = " + Calculadora.restar(num1, num2));
+        System.out.println(num1 + " * " + num2 + " = " + Calculadora.multiplicar(num1, num2));
         if (num2 != 0) {
-            System.out.println("   " + num1 + " / " + num2 + " = " + Calculadora.dividir(num1, num2));
-        } else {
-            System.out.println("   División por cero no permitida");
+            System.out.println(num1 + " / " + num2 + " = " + Calculadora.dividir(num1, num2));
         }
 
-        System.out.println("\n💡 Comparación con la clase Math de Java:");
-        System.out.println("   Math.sqrt(16) = " + Math.sqrt(16));
-        System.out.println("   Math.pow(2, 8) = " + Math.pow(2, 8));
-        System.out.println("   Math.abs(-42) = " + Math.abs(-42));
+        System.out.println("\n💡 Comparación con Math de Java:");
+        System.out.println("Math.sqrt(16) = " + Math.sqrt(16));
+        System.out.println("Math.pow(2, 8) = " + Math.pow(2, 8));
+        System.out.println("Math.abs(-42) = " + Math.abs(-42));
 
         // ! ✅ TAREA ALUMNO:
-        // * Añade un método estático potencia(base, exponente) a la clase Calculadora
+        // * Añade un método potencia(base, exponente)
     }
 
-    // ═══════════════════════════════════════════════════════════════════════════════════
-    // *                    EJEMPLO 5: BLOQUE ESTÁTICO DE INICIALIZACIÓN
-    // ═══════════════════════════════════════════════════════════════════════════════════
-
-    // * 📖 TEORÍA: Bloque estático (static { })
-    // ──────────────────────────────────────────────────────────────────────────────────
-    // ? El bloque static { } se ejecuta UNA SOLA VEZ cuando la clase se carga en memoria.
-    // ? Se usa para:
-    // ?   - Inicializar atributos estáticos complejos
-    // ?   - Cargar configuraciones
-    // ?   - Establecer conexiones a bases de datos
-    // ?
-    // ? El orden de ejecución es:
-    // ?   1. Bloque static (al cargar la clase)
-    // ?   2. Constructor (al crear cada objeto)
-    // ──────────────────────────────────────────────────────────────────────────────────
-
-    public static void ejemploBloqueEstatico() {
-        System.out.println("\n" + "═".repeat(70));
-        System.out.println("🏗️ EJEMPLO 5: BLOQUE ESTÁTICO DE INICIALIZACIÓN");
-        System.out.println("═".repeat(70));
+    // * 📖 TEORÍA: Bloque estático
+    // ──────────────────────────────────────────────
+    // ? Se ejecuta UNA sola vez al cargar la clase.
+    // ? Se usa para inicializar cosas complejas.
+    public static void ejemploBloqueStatic() {
+        System.out.println("\n🏗️ EJEMPLO 5: BLOQUE ESTÁTICO");
+        System.out.println("──────────────────────────────────────");
 
         System.out.println("\n📋 La clase Configuracion tiene un bloque static { }");
-        System.out.println("   que se ejecuta AUTOMÁTICAMENTE al cargar la clase.\n");
+        System.out.println("Se ejecuta AUTOMÁTICAMENTE al usar la clase.\n");
 
-        // ? Al acceder a la clase por primera vez, se ejecuta su bloque static
-        System.out.println("🔄 Accediendo a Configuracion por primera vez...\n");
-        System.out.println("──────────────────────────────────────");
-        Configuracion.mostrarConfiguracion();
-        System.out.println("──────────────────────────────────────");
+        System.out.println("🔄 Accediendo a Configuracion...\n");
+        Configuracion.mostrarConfiguracion();       // 🔄 Primera vez que usamos la clase
 
-        System.out.println("\n🔄 Creando objetos de Configuracion...");
-        System.out.println("   (El bloque static NO se vuelve a ejecutar)\n");
-
-        // ? El bloque static solo se ejecuta una vez, aunque creemos varios objetos
-        Configuracion c1 = new Configuracion();
-        Configuracion c2 = new Configuracion();
+        System.out.println("\n🔄 Creando objetos (el bloque NO se repite):\n");
+        Configuracion c1 = new Configuracion();     // 🏗️ Creamos objeto 1
+        Configuracion c2 = new Configuracion();     // 🏗️ Creamos objeto 2
 
         System.out.println("\n📊 Orden de ejecución:");
-        System.out.println("   1. Bloque STATIC → Solo 1 vez (al cargar clase)");
-        System.out.println("   2. Constructor → Cada vez que se crea un objeto");
+        System.out.println("   1. Bloque STATIC --> Solo 1 vez");
+        System.out.println("   2. Constructor --> Cada new");
 
         // ! ✅ TAREA ALUMNO:
-        // * Añade un bloque static a la clase Alumno que imprima un mensaje
+        // * Añade un bloque static a la clase Alumno
     }
 
-    // ═══════════════════════════════════════════════════════════════════════════════════
-    // *                    EJEMPLO 6: PATRÓN SINGLETON
-    // ═══════════════════════════════════════════════════════════════════════════════════
-
     // * 📖 TEORÍA: Patrón Singleton
-    // ──────────────────────────────────────────────────────────────────────────────────
-    // ? El patrón Singleton garantiza que solo exista UNA instancia de una clase.
-    // ? Se usa para:
-    // ?   - Gestores de configuración
-    // ?   - Conexiones a bases de datos
-    // ?   - Logs del sistema
-    // ?
-    // ? Características:
-    // ?   - Constructor PRIVADO (nadie puede hacer new)
-    // ?   - Atributo static con la única instancia
-    // ?   - Método static getInstancia() para obtenerla
-    // ──────────────────────────────────────────────────────────────────────────────────
-
-    public static void ejemploPatronSingleton() {
-        System.out.println("\n" + "═".repeat(70));
-        System.out.println("🎯 EJEMPLO 6: PATRÓN SINGLETON (una sola instancia)");
-        System.out.println("═".repeat(70));
-
-        System.out.println("\n📋 La clase Logger solo permite UNA instancia:");
+    // ──────────────────────────────────────────────
+    // ? Solo existe UNA instancia de la clase.
+    // ? Constructor privado + método getInstancia()
+    public static void ejemploSingleton() {
+        System.out.println("\n🎯 EJEMPLO 6: PATRÓN SINGLETON");
         System.out.println("──────────────────────────────────────");
 
-        // ? No podemos hacer: Logger log = new Logger(); // Error: constructor privado
+        System.out.println("\n📋 Logger solo permite UNA instancia:");
 
-        // ? Obtenemos la instancia única con getInstancia()
-        Logger log1 = Logger.getInstancia();
-        Logger log2 = Logger.getInstancia();
+        Logger log1 = Logger.getInstancia();        // 🎯 Obtenemos instancia 1
+        Logger log2 = Logger.getInstancia();        // 🎯 Obtenemos instancia 2
 
-        System.out.println("\n🔍 Comprobando que son la MISMA instancia:");
-        System.out.println("   log1 == log2 → " + (log1 == log2));
-        System.out.println("   Ambas variables apuntan al MISMO objeto en memoria");
+        System.out.println("\n🔍 ¿Son el mismo objeto?");
+        System.out.println("log1 == log2 --> " + (log1 == log2));
 
         System.out.println("\n📝 Usando el Logger:");
         log1.escribirLog("INFO", "Aplicación iniciada");
         log2.escribirLog("WARNING", "Memoria al 80%");
-        log1.escribirLog("ERROR", "No se pudo conectar a la BD");
+        log1.escribirLog("ERROR", "Conexión fallida");
 
-        System.out.println("\n📊 Mensajes registrados: " + Logger.getInstancia().getTotalMensajes());
+        System.out.println("\n📊 Mensajes totales: " + Logger.getInstancia().getTotalMensajes());
 
-        System.out.println("\n💡 ¿Por qué usar Singleton?");
-        System.out.println("   - Asegura que siempre usamos el MISMO log");
-        System.out.println("   - Evita problemas de concurrencia");
-        System.out.println("   - Ahorra recursos (solo 1 objeto en memoria)");
+        System.out.println("\n💡 ¿Por qué Singleton?");
+        System.out.println("   - Siempre el MISMO objeto");
+        System.out.println("   - Ahorra memoria");
+        System.out.println("   - Ideal para logs, configs, BD");
 
         // ! ✅ TAREA ALUMNO:
-        // * Crea una clase Singleton llamada GestorBaseDatos con métodos conectar() y desconectar()
+        // * Crea GestorBaseDatos con conectar() y desconectar()
     }
 
-    // ═══════════════════════════════════════════════════════════════════════════════════
-    // *                    RESUMEN TEÓRICO COMPLETO
-    // ═══════════════════════════════════════════════════════════════════════════════════
-
-    public static void mostrarResumenTeorico() {
-        System.out.println("\n" + "═".repeat(70));
-        System.out.println("📋 RESUMEN TEÓRICO: STATIC EN JAVA");
-        System.out.println("═".repeat(70));
-
-        System.out.println("""
+    // * 📖 RESUMEN TEÓRICO
+    // ──────────────────────────────────────────────
+    public static void mostrarResumen() {
+        System.out.println("\n📋 RESUMEN: STATIC EN JAVA");
+        System.out.println("══════════════════════════════════════════════════════════════════");
         
-        ┌─────────────────────────────────────────────────────────────────────┐
-        │  🔹 ¿QUÉ SIGNIFICA STATIC?                                          │
-        ├─────────────────────────────────────────────────────────────────────┤
-        │  STATIC = Pertenece a la CLASE, no a cada objeto individual.        │
-        │  Se comparte entre TODAS las instancias de esa clase.               │
-        └─────────────────────────────────────────────────────────────────────┘
+        System.out.println("\n🔹 ¿QUÉ ES STATIC?");
+        System.out.println("   Pertenece a la CLASE, no a cada objeto.");
+        System.out.println("   Se comparte entre TODAS las instancias.");
         
-        ┌─────────────────────────────────────────────────────────────────────┐
-        │  🔹 ATRIBUTOS ESTÁTICOS                                             │
-        ├─────────────────────────────────────────────────────────────────────┤
-        │  • Se declaran con: static tipo nombre;                             │
-        │  • Se acceden con: NombreClase.atributo                             │
-        │  • Son COMPARTIDOS por todos los objetos                            │
-        │  • Existen aunque no haya ningún objeto creado                      │
-        │                                                                     │
-        │  Ejemplo:                                                           │
-        │     static int contador = 0;                                        │
-        │     System.out.println(MiClase.contador);                           │
-        └─────────────────────────────────────────────────────────────────────┘
+        System.out.println("\n🔹 ATRIBUTOS ESTÁTICOS");
+        System.out.println("   static int contador = 0;");
+        System.out.println("   Se accede: NombreClase.contador");
+        System.out.println("   Son compartidos por todos los objetos.");
         
-        ┌─────────────────────────────────────────────────────────────────────┐
-        │  🔹 MÉTODOS ESTÁTICOS                                               │
-        ├─────────────────────────────────────────────────────────────────────┤
-        │  • Se declaran con: static tipoRetorno nombre(params)               │
-        │  • Se llaman con: NombreClase.metodo()                              │
-        │  • NO necesitan un objeto para ser llamados                         │
-        │  • NO pueden usar atributos/métodos no estáticos                    │
-        │  • NO pueden usar 'this'                                            │
-        │                                                                     │
-        │  Ejemplo:                                                           │
-        │     public static int sumar(int a, int b) { return a + b; }         │
-        │     int resultado = Calculadora.sumar(5, 3);                        │
-        └─────────────────────────────────────────────────────────────────────┘
+        System.out.println("\n🔹 MÉTODOS ESTÁTICOS");
+        System.out.println("   public static int sumar(int a, int b) { }");
+        System.out.println("   Se llama: Calculadora.sumar(5, 3)");
+        System.out.println("   NO necesitan crear un objeto.");
+        System.out.println("   NO pueden usar this ni atributos no estáticos.");
         
-        ┌─────────────────────────────────────────────────────────────────────┐
-        │  🔹 CONSTANTES (final static)                                       │
-        ├─────────────────────────────────────────────────────────────────────┤
-        │  • Se declaran con: final static TIPO NOMBRE = valor;               │
-        │  • Por convención se escriben en MAYÚSCULAS_CON_GUIONES             │
-        │  • Su valor NO puede cambiar después de asignarse                   │
-        │                                                                     │
-        │  Ejemplo:                                                           │
-        │     public static final double PI = 3.14159;                        │
-        │     public static final int MAX_INTENTOS = 3;                       │
-        └─────────────────────────────────────────────────────────────────────┘
+        System.out.println("\n🔹 CONSTANTES (final static)");
+        System.out.println("   public static final double PI = 3.14159;");
+        System.out.println("   Se escriben en MAYUSCULAS_CON_GUIONES.");
+        System.out.println("   No pueden cambiar de valor.");
         
-        ┌─────────────────────────────────────────────────────────────────────┐
-        │  🔹 BLOQUE ESTÁTICO static { }                                      │
-        ├─────────────────────────────────────────────────────────────────────┤
-        │  • Se ejecuta UNA SOLA VEZ cuando la clase se carga                 │
-        │  • Se usa para inicializar atributos estáticos complejos            │
-        │  • Se ejecuta ANTES que cualquier constructor                       │
-        │                                                                     │
-        │  Ejemplo:                                                           │
-        │     static {                                                        │
-        │         System.out.println("Clase cargada");                        │
-        │         configuracion = cargarConfig();                             │
-        │     }                                                               │
-        └─────────────────────────────────────────────────────────────────────┘
+        System.out.println("\n🔹 BLOQUE ESTÁTICO");
+        System.out.println("   static { // código }");
+        System.out.println("   Se ejecuta UNA vez al cargar la clase.");
+        System.out.println("   Va ANTES que cualquier constructor.");
         
-        ┌─────────────────────────────────────────────────────────────────────┐
-        │  🔹 CUÁNDO USAR STATIC                                              │
-        ├─────────────────────────────────────────────────────────────────────┤
-        │  ✅ USAR STATIC cuando:                                             │
-        │     • El valor/método es igual para TODOS los objetos               │
-        │     • Es una función de utilidad (Math.sqrt, Integer.parseInt)      │
-        │     • Quieres contar instancias de una clase                        │
-        │     • Defines constantes (PI, GRAVEDAD, MAX_VALOR)                  │
-        │     • Implementas el patrón Singleton                               │
-        │                                                                     │
-        │  ❌ NO USAR STATIC cuando:                                          │
-        │     • El valor es diferente para cada objeto                        │
-        │     • El método necesita acceder a atributos de instancia           │
-        │     • Cada objeto debe tener su propio comportamiento               │
-        └─────────────────────────────────────────────────────────────────────┘
+        System.out.println("\n🔹 CUÁNDO USAR STATIC");
+        System.out.println("   ✅ Contadores compartidos");
+        System.out.println("   ✅ Funciones de utilidad (Math.sqrt)");
+        System.out.println("   ✅ Constantes (PI, GRAVEDAD)");
+        System.out.println("   ✅ Patrón Singleton");
+        System.out.println("   ❌ NO usar si cada objeto necesita su valor");
         
-        ┌─────────────────────────────────────────────────────────────────────┐
-        │  🔹 ERRORES COMUNES                                                 │
-        ├─────────────────────────────────────────────────────────────────────┤
-        │  ❌ Error: acceder a atributo no static desde método static         │
-        │     static void metodo() {                                          │
-        │         System.out.println(this.nombre); // ERROR                   │
-        │     }                                                               │
-        │                                                                     │
-        │  ❌ Error: llamar método static como si fuera de instancia          │
-        │     Calculadora calc = new Calculadora();                           │
-        │     calc.sumar(5, 3); // Funciona pero NO es correcto               │
-        │     Calculadora.sumar(5, 3); // ✅ CORRECTO                         │
-        └─────────────────────────────────────────────────────────────────────┘
-        """);
+        System.out.println("\n══════════════════════════════════════════════════════════════════");
 
         // ! ✅ TAREA ALUMNO:
-        // * Lee este resumen y prepara 3 preguntas para la próxima clase
+        // * Prepara 3 preguntas sobre STATIC para la próxima clase
     }
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════════════
-// *                           CLASES AUXILIARES PARA LOS EJEMPLOS
-// ═══════════════════════════════════════════════════════════════════════════════════════
 
-// * 📖 CLASE COCHE - Demuestra la diferencia entre atributos static y no static
-// ──────────────────────────────────────────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════════════════════════════════════
+// *                              CLASES AUXILIARES
+// ════════════════════════════════════════════════════════════════════════════════════════
+
+
+// * 📖 CLASE COCHE - Diferencia entre static y no static
+// ──────────────────────────────────────────────
 class Coche {
-    // ? Atributos NO STATIC - Cada coche tiene los suyos propios
-    String marca;                      // 🚗 Marca del coche (diferente para cada uno)
-    String color;                      // 🎨 Color del coche (diferente para cada uno)
+    String marca;                      // 🚗 NO STATIC - cada coche tiene su marca
+    String color;                      // 🎨 NO STATIC - cada coche tiene su color
+    static int totalCoches = 0;        // 📊 STATIC - contador compartido
 
-    // ? Atributo STATIC - Compartido por TODOS los coches
-    static int totalCoches = 0;        // 📊 Contador global de coches creados
-
-    // ? Constructor: se ejecuta cada vez que creamos un coche
     public Coche(String marca, String color) {
-        this.marca = marca;            // Asignamos la marca de ESTE coche
-        this.color = color;            // Asignamos el color de ESTE coche
-        totalCoches++;                 // 📈 Incrementamos el contador COMPARTIDO
+        this.marca = marca;
+        this.color = color;
+        totalCoches++;                 // 📈 Incrementa el contador compartido
     }
 }
 
-// * 📖 CLASE ALUMNO - Demuestra contador de instancias y IDs únicos
-// ──────────────────────────────────────────────────────────────────────────────────────
+
+// * 📖 CLASE ALUMNO - Contador de instancias con ID único
+// ──────────────────────────────────────────────
 class Alumno {
-    // ? Atributos de instancia (cada alumno tiene los suyos)
-    private String nombre;
-    private int edad;
-    private int id;                    // ID único de cada alumno
+    private String nombre;             // 📝 Nombre del alumno
+    private int edad;                  // 🎂 Edad del alumno
+    private int id;                    // 🔑 ID único
 
-    // ? Atributos estáticos (compartidos por todos)
-    private static int totalAlumnos = 0;      // Contador de alumnos
-    private static int siguienteId = 1;       // Próximo ID a asignar
+    private static int totalAlumnos = 0;   // 📊 Contador de alumnos
+    private static int siguienteId = 1;    // 🔢 Próximo ID a asignar
 
-    // ? Constructor
     public Alumno(String nombre, int edad) {
         this.nombre = nombre;
         this.edad = edad;
-        this.id = siguienteId;         // Asignamos el ID actual
-        siguienteId++;                 // Incrementamos para el siguiente alumno
-        totalAlumnos++;                // Incrementamos el contador total
+        this.id = siguienteId;         // 🔑 Asigna ID único
+        siguienteId++;                 // 🔢 Prepara el siguiente
+        totalAlumnos++;                // 📈 Incrementa contador
     }
 
-    // ? Getters
     public String getNombre() { return nombre; }
     public int getEdad() { return edad; }
     public int getId() { return id; }
-
-    // ? Métodos estáticos
     public static int getTotalAlumnos() { return totalAlumnos; }
-    
+
     public static void resetearContador() {
         totalAlumnos = 0;
         siguienteId = 1;
     }
 }
 
-// * 📖 CLASE CONSTANTES - Demuestra el uso de final static
-// ──────────────────────────────────────────────────────────────────────────────────────
+
+// * 📖 CLASE CONSTANTES - Uso de final static
+// ──────────────────────────────────────────────
 class Constantes {
-    // ? Constantes matemáticas
-    public static final double PI = 3.14159265358979;
-    public static final double E = 2.71828182845904;
-    public static final double GRAVEDAD = 9.81;
+    public static final double PI = 3.14159265358979;      // 🔢 Número PI
+    public static final double E = 2.71828182845904;       // 🔢 Número de Euler
+    public static final double GRAVEDAD = 9.81;            // 🌍 Gravedad terrestre
+    public static final String NOMBRE_APP = "MiApp v1.0";  // 📱 Nombre de la app
+    public static final String VERSION = "1.0.0";          // 📋 Versión
+    public static final int MAX_USUARIOS = 100;            // 👥 Límite usuarios
 
-    // ? Constantes de configuración de la aplicación
-    public static final String NOMBRE_APP = "MiAplicación v1.0";
-    public static final String VERSION = "1.0.0";
-    public static final int MAX_USUARIOS = 100;
-
-    // ? Constructor privado - No se pueden crear instancias
-    private Constantes() {}
+    private Constantes() { }           // 🔒 Constructor privado
 }
 
-// * 📖 CLASE CALCULADORA - Demuestra métodos estáticos de utilidad
-// ──────────────────────────────────────────────────────────────────────────────────────
+
+// * 📖 CLASE CALCULADORA - Métodos estáticos de utilidad
+// ──────────────────────────────────────────────
 class Calculadora {
-    // ? Operaciones básicas
+
     public static double sumar(double a, double b) {
         return a + b;
     }
@@ -547,7 +371,6 @@ class Calculadora {
         return a / b;
     }
 
-    // ? Funciones de utilidad
     public static String esParImpar(int numero) {
         return (numero % 2 == 0) ? "PAR" : "IMPAR";
     }
@@ -569,71 +392,64 @@ class Calculadora {
         return resultado;
     }
 
-    // ? Constructor privado - Esta clase solo tiene métodos estáticos
-    private Calculadora() {}
+    private Calculadora() { }          // 🔒 Constructor privado
 }
 
-// * 📖 CLASE CONFIGURACION - Demuestra bloque estático
-// ──────────────────────────────────────────────────────────────────────────────────────
+
+// * 📖 CLASE CONFIGURACION - Bloque estático
+// ──────────────────────────────────────────────
 class Configuracion {
-    // ? Atributos estáticos
     private static String idioma;
     private static String zonaHoraria;
     private static boolean modoDebug;
     private static int numInstancias = 0;
 
-    // ? BLOQUE ESTÁTICO - Se ejecuta UNA vez al cargar la clase
+    // 🏗️ BLOQUE ESTÁTICO - Se ejecuta UNA vez al cargar la clase
     static {
-        System.out.println("🔄 [BLOQUE STATIC] Inicializando configuración...");
+        System.out.println("🔄 [BLOQUE STATIC] Cargando configuración...");
         idioma = "Español";
         zonaHoraria = "Europe/Madrid";
         modoDebug = false;
-        System.out.println("🔄 [BLOQUE STATIC] Configuración cargada correctamente.");
+        System.out.println("🔄 [BLOQUE STATIC] Configuración lista.");
     }
 
-    // ? Constructor - Se ejecuta cada vez que creamos un objeto
+    // 🏗️ CONSTRUCTOR - Se ejecuta cada vez que creamos un objeto
     public Configuracion() {
         numInstancias++;
         System.out.println("🏗️ [CONSTRUCTOR] Instancia #" + numInstancias + " creada.");
     }
 
-    // ? Método estático para mostrar configuración
     public static void mostrarConfiguracion() {
-        System.out.println("📋 Configuración actual:");
-        System.out.println("   - Idioma: " + idioma);
-        System.out.println("   - Zona horaria: " + zonaHoraria);
-        System.out.println("   - Modo debug: " + (modoDebug ? "Activado" : "Desactivado"));
+        System.out.println("📋 Configuración:");
+        System.out.println("   Idioma: " + idioma);
+        System.out.println("   Zona: " + zonaHoraria);
+        System.out.println("   Debug: " + (modoDebug ? "Sí" : "No"));
     }
 }
 
-// * 📖 CLASE LOGGER - Demuestra el patrón Singleton
-// ──────────────────────────────────────────────────────────────────────────────────────
+
+// * 📖 CLASE LOGGER - Patrón Singleton
+// ──────────────────────────────────────────────
 class Logger {
-    // ? Atributo estático que guarda la ÚNICA instancia
-    private static Logger instanciaUnica = null;
+    private static Logger instanciaUnica = null;  // 🎯 La única instancia
+    private ArrayList<String> mensajes;           // 📋 Lista de mensajes
+    private int totalMensajes;                    // 🔢 Contador
 
-    // ? Atributos de la instancia
-    private ArrayList<String> mensajes;
-    private int totalMensajes;
-
-    // ? Constructor PRIVADO - Nadie puede hacer new Logger()
+    // 🔒 CONSTRUCTOR PRIVADO - No se puede hacer new Logger()
     private Logger() {
         mensajes = new ArrayList<>();
         totalMensajes = 0;
-        System.out.println("📝 Logger creado (solo se crea UNA vez)");
+        System.out.println("📝 Logger creado (solo UNA vez)");
     }
 
-    // ? Método estático para obtener la instancia única
+    // 🎯 Método para obtener la instancia única
     public static Logger getInstancia() {
         if (instanciaUnica == null) {
-            // Si no existe, la creamos
             instanciaUnica = new Logger();
         }
-        // Siempre devolvemos la misma instancia
         return instanciaUnica;
     }
 
-    // ? Método para escribir en el log
     public void escribirLog(String nivel, String mensaje) {
         String entrada = "[" + nivel + "] " + mensaje;
         mensajes.add(entrada);
@@ -641,7 +457,6 @@ class Logger {
         System.out.println("📝 " + entrada);
     }
 
-    // ? Getter para el total de mensajes
     public int getTotalMensajes() {
         return totalMensajes;
     }
