@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+    ? ¿Qué es este archivo?
+    ? El pom.xml es el archivo de configuración de Maven.
+    ? Aquí defines el nombre del proyecto, la versión de Java,
+    ? las librerías que necesitas (dependencias) y los plugins.
+
+    ! IMPORTANTE: Después de modificar este archivo en Eclipse:
+    ! Click derecho > Maven > Update Project... > OK
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
+    <!-- * Versión del modelo POM (siempre 4.0.0, no cambies esto) -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- ============================================================ -->
+    <!-- * IDENTIFICACIÓN DEL PROYECTO                                -->
+    <!-- ============================================================ -->
+    
+    <!-- ? groupId: Identificador de tu organización/grupo (como un paquete Java) -->
+    <groupId>com.entornos</groupId>
+    
+    <!-- ? artifactId: Nombre del proyecto -->
+    <artifactId>junit5-clase</artifactId>
+    
+    <!-- ? version: Versión de tu proyecto -->
+    <version>1.0</version>
+    
+    <!-- ? packaging: Tipo de empaquetado (jar = aplicación Java normal) -->
+    <packaging>jar</packaging>
+
+    <!-- ============================================================ -->
+    <!-- * PROPIEDADES — Configuración general                        -->
+    <!-- ============================================================ -->
+    <properties>
+        <!-- * Versión de Java que usamos (17 es LTS, recomendada) -->
+        <!-- ! Si usas Java 11, cambia ambas a 11 -->
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        
+        <!-- * Codificación de caracteres (UTF-8 para acentos, ñ, etc.) -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        
+        <!-- * Versión de JUnit 5 (centralizada aquí para no repetirla) -->
+        <junit.version>5.10.2</junit.version>
+    </properties>
+
+    <!-- ============================================================ -->
+    <!-- * DEPENDENCIAS — Librerías que necesitamos                   -->
+    <!-- ============================================================ -->
+    <dependencies>
+        
+        <!-- 
+            * JUnit Jupiter API — Para escribir tests (@Test, asserts, etc.)
+            ? scope=test significa que SOLO se usa para tests, no se empaqueta
+            ? con la aplicación final.
+        -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- 
+            * JUnit Jupiter Engine — Motor que ejecuta los tests
+            ? Sin esto, Maven no puede encontrar ni ejecutar los tests.
+            ! Si tus tests "no se detectan", revisa que esta dependencia esté presente.
+        -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- 
+            * JUnit Jupiter Params — Para tests parametrizados
+            ? Necesario para usar @ParameterizedTest, @ValueSource, @CsvSource
+            ! Sin esta dependencia, @ParameterizedTest NO compilará.
+        -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <!-- ============================================================ -->
+    <!-- * BUILD — Configuración de compilación y plugins             -->
+    <!-- ============================================================ -->
+    <build>
+        <plugins>
+            <!-- 
+                * Maven Surefire Plugin — Ejecuta los tests con `mvn test`
+                ? Surefire es el plugin estándar de Maven para ejecutar tests.
+                ? La versión 3.2.5 soporta JUnit 5 de forma nativa.
+                ! Si usas una versión antigua (< 2.22.0), JUnit 5 NO funcionará.
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+            </plugin>
+
+            <!-- 
+                * Maven Compiler Plugin — Configura la versión de Java
+                ? Asegura que Maven compile con Java 17 (o la que pongas)
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.12.1</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

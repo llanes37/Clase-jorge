@@ -123,4 +123,17 @@ public class Bateria {
     // * 1. Crea una batería con 50% y llama a consumir(30). ¿Cuánto queda?
     // * 2. Luego llama a consumir(50). ¿Qué valor tiene ahora? ¿Puede ser negativo?
     // * 3. Prueba a crear una batería con porcentaje 150. ¿Qué valor se guarda?
+
+    public static void main(String[] args) {
+        Bateria b1 = new Bateria("Duracell", 50);
+        b1.consumir(30);
+        System.out.println("1) Después de consumir 30 desde 50: " + b1.getPorcentajeCarga() + "%");
+
+        b1.consumir(50);
+        System.out.println("2) Después de consumir 50 más: " + b1.getPorcentajeCarga() + "%");
+        System.out.println("   ¿Puede ser negativo? No, nunca baja de 0.");
+
+        Bateria b2 = new Bateria("Energizer", 150);
+        System.out.println("3) Si creas una batería con 150, se guarda: " + b2.getPorcentajeCarga() + "%");
+    }
 }
