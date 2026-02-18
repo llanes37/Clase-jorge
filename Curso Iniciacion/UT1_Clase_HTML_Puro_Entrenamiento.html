@@ -1,0 +1,407 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- ! META 1: codificacion UTF-8 para mostrar tildes y caracteres especiales -->
+  <meta charset="UTF-8" />
+
+  <!-- ! META 2: viewport para que la pagina escale correctamente en movil -->
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- ! TITLE: aparece en la pestana del navegador -->
+  <title>UT1 - Plantilla Didactica HTML Puro (Better Comments)</title>
+
+  <!--
+    =====================================================
+    ! PLANTILLA DIDACTICA - SOLO HTML (SIN CSS NI JS)
+    =====================================================
+
+    ? Objetivo docente:
+      - Tener una base clara para explicar HTML por bloques.
+      - Practicar estructura semantica, enlaces, tablas, formularios y multimedia.
+      - Dejar tareas para el alumno con soluciones comentadas.
+
+    * Convencion Better Comments (usa extension "Better Comments"):
+      ! Importante: concepto clave que debes explicar en clase.
+      ? Nota: detalle util o aclaracion.
+      * Consejo: buenas practicas.
+      TODO Alumno: ejercicio para completar en directo.
+      ✅ Solucion: propuesta comentada para comparar.
+
+    * Regla de esta plantilla:
+      - No usar <style>, style="...", ni <script>.
+      - Todo es HTML puro para entrenar fundamentos.
+  -->
+</head>
+<body>
+
+  <!--
+    =====================================================
+    ! HEADER + NAV
+    =====================================================
+    ! <header> representa la cabecera de la pagina.
+    ! <nav> agrupa enlaces de navegacion.
+    ? Los enlaces con #id bajan a secciones internas.
+  -->
+  <header>
+    <h1>Pagina Web Completa para Alumnos</h1>
+    <p>Guia de clase para practicar HTML puro paso a paso.</p>
+
+    <nav aria-label="Indice principal">
+      <ul>
+        <li><a href="#introduccion">Introduccion</a></li>
+        <li><a href="#texto-listas">Texto y listas</a></li>
+        <li><a href="#enlaces">Enlaces</a></li>
+        <li><a href="#tablas">Tablas</a></li>
+        <li><a href="#imagenes">Imagenes</a></li>
+        <li><a href="#formularios">Formularios</a></li>
+        <li><a href="#multimedia">Multimedia</a></li>
+        <li><a href="#mini-proyecto">Proyecto final</a></li>
+      </ul>
+    </nav>
+
+    <!-- TODO Alumno:
+      Anade aqui un enlace "Contacto" que apunte a #contacto.
+    -->
+
+    <!-- ✅ Solucion (comentada)
+    <nav aria-label="Indice principal">
+      <ul>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+    </nav>
+    -->
+  </header>
+
+  <main>
+
+    <!--
+      =====================================================
+      ! SECCION 1: INTRODUCCION
+      =====================================================
+      ! <main> contiene el contenido principal unico del documento.
+      ! <section> agrupa contenido relacionado por tema.
+      ? aria-labelledby conecta la seccion con su titulo para accesibilidad.
+    -->
+    <section id="introduccion" aria-labelledby="h-introduccion">
+      <h2 id="h-introduccion">Introduccion a HTML</h2>
+
+      <p>
+        HTML define la estructura de una pagina web mediante etiquetas.
+        Cada etiqueta tiene una funcion concreta dentro del documento.
+      </p>
+
+      <!--
+        * Idea para explicar en clase:
+          - HTML = estructura
+          - CSS = apariencia
+          - JavaScript = comportamiento
+      -->
+    </section>
+
+    <!--
+      =====================================================
+      ! SECCION 2: TEXTO Y LISTAS
+      =====================================================
+      ! Jerarquia de titulos: h1 > h2 > h3...
+      ? Solo debe existir un h1 por pagina (recomendacion habitual).
+      ! <ul> lista sin orden, <ol> lista ordenada.
+    -->
+    <section id="texto-listas" aria-labelledby="h-texto-listas">
+      <h2 id="h-texto-listas">Texto y listas</h2>
+
+      <h3>Lista desordenada (ul)</h3>
+      <ul>
+        <li>HTML: estructura</li>
+        <li>CSS: presentacion</li>
+        <li>JavaScript: interactividad</li>
+      </ul>
+
+      <h3>Lista ordenada (ol)</h3>
+      <ol>
+        <li>Planificar</li>
+        <li>Construir</li>
+        <li>Revisar</li>
+      </ol>
+
+      <!-- TODO Alumno:
+        Crea una lista ordenada de 4 pasos para publicar una web.
+      -->
+
+      <!-- ✅ Solucion (comentada)
+      <ol>
+        <li>Escribir HTML</li>
+        <li>Comprobar enlaces</li>
+        <li>Validar contenido</li>
+        <li>Subir al servidor</li>
+      </ol>
+      -->
+    </section>
+
+    <!--
+      =====================================================
+      ! SECCION 3: ENLACES
+      =====================================================
+      ! <a> crea enlaces internos y externos.
+      ! target="_blank" abre en nueva pestana.
+      ! rel="noopener" mejora seguridad al abrir otra pestana.
+      * En clase, diferencia enlace interno (#id) y enlace externo (https://...).
+    -->
+    <section id="enlaces" aria-labelledby="h-enlaces">
+      <h2 id="h-enlaces">Enlaces en HTML</h2>
+
+      <p>
+        Enlace interno a <a href="#tablas">seccion de tablas</a>.
+      </p>
+
+      <p>
+        Enlace externo a
+        <a href="https://developer.mozilla.org/es/docs/Web/HTML" target="_blank" rel="noopener">MDN HTML</a>.
+      </p>
+
+      <!-- TODO Alumno:
+        1) Anade un enlace a W3C HTML.
+        2) Anade un enlace de correo con mailto:.
+      -->
+
+      <!-- ✅ Solucion (comentada)
+      <p><a href="https://www.w3.org/TR/html52/" target="_blank" rel="noopener">Especificacion HTML</a></p>
+      <p><a href="mailto:alumno@ejemplo.com">Enviar correo</a></p>
+      -->
+    </section>
+
+    <!--
+      =====================================================
+      ! SECCION 4: TABLAS
+      =====================================================
+      ! Tabla correcta: caption + thead + tbody (+ tfoot opcional).
+      ? <th scope="col"> para encabezados de columna.
+      ? <th scope="row"> para encabezados de fila.
+      * Evita usar tablas para maquetar paginas.
+    -->
+    <section id="tablas" aria-labelledby="h-tablas">
+      <h2 id="h-tablas">Tablas en HTML</h2>
+
+      <table>
+        <caption>Inventario basico</caption>
+        <thead>
+          <tr>
+            <th scope="col">Producto</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Unidades</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Teclado</th>
+            <td>19,99 EUR</td>
+            <td>12</td>
+          </tr>
+          <tr>
+            <th scope="row">Raton</th>
+            <td>9,50 EUR</td>
+            <td>30</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- TODO Alumno:
+        1) Anade una fila con "Auriculares" y sus datos.
+        2) Anade un tfoot con total de unidades.
+      -->
+
+      <!-- ✅ Solucion (comentada)
+      <tfoot>
+        <tr>
+          <th scope="row">Total</th>
+          <td></td>
+          <td>50</td>
+        </tr>
+      </tfoot>
+      -->
+    </section>
+
+    <!--
+      =====================================================
+      ! SECCION 5: IMAGENES
+      =====================================================
+      ! <img> necesita src (ruta) y alt (descripcion).
+      ? alt se usa para accesibilidad y cuando la imagen no carga.
+      ! <figure> + <figcaption> dan contexto a la imagen.
+    -->
+    <section id="imagenes" aria-labelledby="h-imagenes">
+      <h2 id="h-imagenes">Imagenes en HTML</h2>
+
+      <p>Ejemplo de imagen externa:</p>
+      <img src="https://via.placeholder.com/480x240" alt="Imagen de ejemplo rectangular" />
+
+      <figure>
+        <img src="https://via.placeholder.com/320x180" alt="Miniatura de ejemplo" />
+        <figcaption>Pie de foto de ejemplo.</figcaption>
+      </figure>
+
+      <!-- TODO Alumno:
+        1) Inserta una imagen local desde img/foto.jpg.
+        2) Escribe un alt descriptivo real.
+      -->
+    </section>
+
+    <!--
+      =====================================================
+      ! SECCION 6: FORMULARIOS
+      =====================================================
+      ! <form> agrupa controles para enviar datos.
+      ! label[for] debe apuntar al id del input correspondiente.
+      ? required activa validacion basica del navegador.
+      * type="email" y type="tel" ayudan a validar formato.
+    -->
+    <section id="formularios" aria-labelledby="h-formularios">
+      <h2 id="h-formularios">Formularios en HTML</h2>
+
+      <form action="#" method="post">
+        <p>Los campos con * son obligatorios.</p>
+
+        <label for="nombre">Nombre *</label><br />
+        <input id="nombre" name="nombre" type="text" required placeholder="Tu nombre" /><br /><br />
+
+        <label for="email">Correo electronico *</label><br />
+        <input id="email" name="email" type="email" required placeholder="tucorreo@ejemplo.com" /><br /><br />
+
+        <label for="telefono">Telefono</label><br />
+        <input
+          id="telefono"
+          name="telefono"
+          type="tel"
+          placeholder="600000000"
+          pattern="\+?34?[\s-]?[0-9]{9}"
+        /><br /><br />
+
+        <fieldset>
+          <legend>Preferencias</legend>
+          <label><input type="checkbox" name="boletin" /> Recibir boletin</label><br />
+          <label><input type="checkbox" name="condiciones" required /> Acepto condiciones *</label>
+        </fieldset>
+
+        <br />
+
+        <label for="comentarios">Comentarios</label><br />
+        <textarea id="comentarios" name="comentarios" rows="4" cols="40" placeholder="Escribe aqui..."></textarea><br /><br />
+
+        <button type="submit">Enviar</button>
+      </form>
+
+      <!-- TODO Alumno:
+        1) Cambia action="#" por action="#introduccion".
+        2) Anade un select "Asunto" con 3 opciones.
+      -->
+
+      <!-- ✅ Solucion (comentada)
+      <label for="asunto">Asunto</label><br />
+      <select id="asunto" name="asunto">
+        <option value="duda">Duda</option>
+        <option value="presupuesto">Presupuesto</option>
+        <option value="otro">Otro</option>
+      </select>
+      -->
+    </section>
+
+    <!--
+      =====================================================
+      ! SECCION 7: MULTIMEDIA
+      =====================================================
+      ! <video> y <audio> permiten reproducir contenido sin plugins.
+      ? controls muestra botones de reproduccion.
+      ! <source> define archivo y tipo MIME.
+      * Si no soporta el formato, se muestra el texto alternativo.
+    -->
+    <section id="multimedia" aria-labelledby="h-multimedia">
+      <h2 id="h-multimedia">Multimedia en HTML</h2>
+
+      <h3>Video</h3>
+      <video controls>
+        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
+        Tu navegador no soporta video HTML5.
+      </video>
+
+      <h3>Audio</h3>
+      <audio controls>
+        <source src="https://www.w3schools.com/html/horse.mp3" type="audio/mpeg" />
+        Tu navegador no soporta audio HTML5.
+      </audio>
+
+      <!-- TODO Alumno:
+        1) Inserta un video local: media/intro.mp4.
+        2) Anade subtitulos con <track kind="subtitles">.
+      -->
+
+      <!-- ✅ Solucion (comentada)
+      <video controls>
+        <source src="media/intro.mp4" type="video/mp4" />
+        <track kind="subtitles" src="media/subs.vtt" srclang="es" label="Espanol" />
+      </video>
+      -->
+    </section>
+
+    <!--
+      =====================================================
+      ! SECCION 8: MINI PROYECTO FINAL
+      =====================================================
+      ! Objetivo: integrar todo lo trabajado en una sola pagina.
+      * Puedes usar esta seccion como rubrica de evaluacion en clase.
+    -->
+    <section id="mini-proyecto" aria-labelledby="h-proyecto">
+      <h2 id="h-proyecto">Proyecto final - Mi portfolio personal</h2>
+
+      <ol>
+        <li>Crear un header con tu nombre y menu de navegacion.</li>
+        <li>Anadir seccion "Sobre mi" con texto corto.</li>
+        <li>Crear seccion "Proyectos" con lista o tabla.</li>
+        <li>Insertar una galeria de 3 imagenes con figure y figcaption.</li>
+        <li>Incluir formulario de contacto completo.</li>
+        <li>Cerrar con footer y enlace de correo.</li>
+      </ol>
+
+      <!-- TODO Alumno:
+        Entrega una version funcional con:
+        - enlaces internos operativos
+        - tabla completa
+        - formulario con validacion basica
+      -->
+    </section>
+
+  </main>
+
+  <!--
+    =====================================================
+    ! FOOTER
+    =====================================================
+    ! <footer> contiene informacion final del documento.
+    ? Suele incluir contacto, copyright y enlaces secundarios.
+  -->
+  <footer id="contacto" aria-labelledby="h-footer">
+    <h2 id="h-footer">Pie de pagina</h2>
+    <p>Creado por [Nombre del alumno].</p>
+
+    <p>Contacto: <a href="mailto:profesor@ejemplo.com">profesor@ejemplo.com</a></p>
+
+    <nav aria-label="Navegacion secundaria">
+      <ul>
+        <li><a href="#introduccion">Introduccion</a></li>
+        <li><a href="#texto-listas">Texto y listas</a></li>
+        <li><a href="#enlaces">Enlaces</a></li>
+        <li><a href="#tablas">Tablas</a></li>
+        <li><a href="#imagenes">Imagenes</a></li>
+        <li><a href="#formularios">Formularios</a></li>
+        <li><a href="#multimedia">Multimedia</a></li>
+      </ul>
+    </nav>
+  </footer>
+
+  <!--
+    ! CIERRE DIDACTICO
+    ? Antes de terminar la clase, revisa:
+      1) que todos los enlaces #id funcionen
+      2) que cada input tenga su label
+      3) que todas las imagenes tengan alt
+  -->
+</body>
+</html>
