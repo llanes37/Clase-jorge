@@ -1,0 +1,824 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+:root {
+  --bg: #030712;
+  --bg-deep: #020617;
+  --paper: rgba(15, 23, 42, 0.68);
+  --paper-soft: rgba(30, 41, 59, 0.48);
+  --paper-strong: rgba(15, 23, 42, 0.9);
+  --ink: #f8fafc;
+  --ink-soft: #94a3b8;
+  --line: rgba(148, 163, 184, 0.15);
+  --line-strong: rgba(148, 163, 184, 0.28);
+  --accent: #38bdf8;
+  --accent-2: #10b981;
+  --accent-3: #8b5cf6;
+  --accent-4: #f59e0b;
+  --ok: #10b981;
+  --error: #ef4444;
+  --dark: #0f172a;
+  --dark-2: #1e293b;
+  --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  --shadow-soft: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  --radius-xl: 24px;
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+  --max: 1360px;
+  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Cascadia Code", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  /* *INFO: Fondo de academia con varias capas para que la practica se sienta
+     *INFO: como material premium y no como una pagina plana sin contexto. */
+  margin: 0;
+  color: var(--ink);
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(56, 189, 248, 0.15), transparent),
+    radial-gradient(ellipse 60% 50% at 100% 60%, rgba(139, 92, 246, 0.1), transparent),
+    radial-gradient(ellipse 80% 50% at 0% 100%, rgba(16, 185, 129, 0.08), transparent);
+  background-attachment: fixed;
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.7), transparent 80%);
+  -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.7), transparent 80%);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+code,
+pre,
+textarea {
+  font-family: var(--font-mono);
+}
+
+section,
+.hero-card,
+.module-card,
+.table-card,
+.dataset-card,
+.practice-card,
+.note-card,
+.lab-card {
+  /* *INFO: Animacion suave para dar ritmo visual al estudio sin distraer del
+     *INFO: contenido. Ayuda a que cada bloque entre como una unidad de clase. */
+  animation: rise 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-timeline: view();
+  animation-range: entry 5% cover 15%;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(36px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.topbar {
+  /* *INFO: La barra superior fija mantiene visible la ruta de navegacion y
+     *INFO: evita que el alumno se pierda al bajar por una pagina larga. */
+  position: sticky;
+  top: 14px;
+  z-index: 40;
+  padding: 12px 16px 0;
+}
+
+.topbar-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-soft);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.brand small {
+  color: var(--ink-soft);
+}
+
+.brand-mark {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-sm);
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent), var(--accent-3));
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.topnav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+}
+
+.topnav a,
+.btn,
+button {
+  text-decoration: none;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-sans);
+}
+
+button {
+  padding: 10px 18px;
+  font-size: 0.92rem;
+}
+
+.topnav a {
+  background: transparent;
+  color: var(--ink-soft);
+}
+
+.topnav a:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--ink);
+}
+
+.primary,
+button.primary {
+  background: var(--ink);
+  color: var(--bg);
+  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.1);
+}
+
+.primary:hover,
+button.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.15);
+}
+
+.secondary,
+button.secondary,
+.script-button,
+.quick-button {
+  background: var(--paper-soft);
+  color: var(--ink);
+  border: 1px solid var(--line);
+}
+
+.secondary:hover,
+button.secondary:hover,
+.script-button:hover,
+.quick-button:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+}
+
+.page {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 40px 24px 96px;
+}
+
+.hero {
+  /* *INFO: Hero a dos columnas con lado conceptual y lado estadistico para que
+     *INFO: el alumno vea contexto y progreso nada mas entrar en la pagina. */
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  background: var(--paper);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow);
+  padding: 48px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) 420px;
+  gap: 40px;
+}
+
+.hero::before {
+  content: "CREATE  •  INSERT  •  JOIN  •  GROUP BY";
+  position: absolute;
+  right: 30px;
+  top: 30px;
+  color: rgba(255, 255, 255, 0.05);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.18em;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  right: -50px;
+  bottom: -50px;
+  width: 240px;
+  height: 240px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.2), transparent 70%);
+  filter: blur(18px);
+  pointer-events: none;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  background: rgba(56, 189, 248, 0.1);
+  color: var(--accent);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 24px;
+}
+
+.display {
+  margin: 0 0 24px;
+  font-size: clamp(2.5rem, 5vw, 4.2rem);
+  line-height: 1.05;
+  background: linear-gradient(to right, #fff, #94a3b8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.lead {
+  max-width: 56ch;
+  margin: 0 0 32px;
+  color: var(--ink-soft);
+  font-size: 1.08rem;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.hero-side {
+  display: grid;
+  gap: 20px;
+  align-content: start;
+}
+
+.hero-card,
+.module-card,
+.table-card,
+.dataset-card,
+.practice-card,
+.note-card,
+.lab-card {
+  /* *INFO: Todas las tarjetas comparten la misma base visual para que el alumno
+     *INFO: identifique de inmediato que cada bloque pertenece al mismo sistema. */
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: rgba(15, 23, 42, 0.76);
+  backdrop-filter: blur(10px);
+  padding: 24px;
+  transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hero-card:hover,
+.module-card:hover,
+.table-card:hover,
+.dataset-card:hover,
+.practice-card:hover,
+.note-card:hover,
+.lab-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 22px 46px rgba(0, 0, 0, 0.4);
+}
+
+.hero-side .hero-card:last-child {
+  background: linear-gradient(145deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+  border-color: rgba(56, 189, 248, 0.2);
+}
+
+.hero-list,
+.script-list,
+.quick-list,
+.link-stack {
+  display: grid;
+  gap: 12px;
+}
+
+.hero-chip {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.03);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.stat {
+  padding: 20px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.28);
+}
+
+.stat strong {
+  display: block;
+  font-size: 2rem;
+  margin-bottom: 4px;
+  background: linear-gradient(135deg, #fff, var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.stat span {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.section {
+  margin-top: 80px;
+}
+
+.section-header {
+  margin-bottom: 32px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: end;
+}
+
+.section-title {
+  margin: 0 0 12px;
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  color: #fff;
+}
+
+.section-copy {
+  margin: 0;
+  color: var(--ink-soft);
+  max-width: 66ch;
+  font-size: 1.06rem;
+}
+
+.tables-grid {
+  /* *INFO: Tres columnas en el mapa para presentar las tablas esenciales como
+     *INFO: piezas paralelas del modelo antes de hablar de las relaciones. */
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.modules-grid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.practice-grid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.notes-grid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.lab-grid {
+  /* !IMPORTANT: En laboratorio se deja un panel lateral fijo porque asi los
+     !IMPORTANT: scripts y atajos siguen visibles mientras se prueba SQL. */
+  display: grid;
+  gap: 24px;
+  grid-template-columns: 360px 1fr;
+  align-items: start;
+}
+
+.lab-grid > .lab-card:first-child {
+  position: sticky;
+  top: 102px;
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.table-card:nth-child(1) {
+  border-top: 3px solid var(--accent);
+}
+
+.table-card:nth-child(2) {
+  border-top: 3px solid var(--accent-2);
+}
+
+.table-card:nth-child(3) {
+  border-top: 3px solid var(--accent-3);
+}
+
+.table-visual,
+.result-table {
+  /* *INFO: Tablas y resultados usan el mismo estilo para reforzar la idea de
+     *INFO: que el alumno pasa del modelo a la consulta sin cambiar de lenguaje. */
+  margin-top: 20px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.table-visual table,
+.result-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  font-family: var(--font-mono);
+}
+
+.table-visual th,
+.table-visual td,
+.result-table th,
+.result-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  color: var(--ink);
+}
+
+.table-visual th,
+.result-table th {
+  background: rgba(255, 255, 255, 0.06);
+  font-weight: 700;
+  color: #fff;
+}
+
+.rel-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto 1fr auto;
+  gap: 16px;
+  align-items: center;
+  margin-top: 18px;
+  color: var(--ink-soft);
+  font-weight: 600;
+  font-family: var(--font-mono);
+  font-size: 0.92rem;
+}
+
+.link-pill {
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  color: #c4b5fd;
+  text-decoration: none;
+}
+
+.file-link:hover {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.35);
+  color: #bae6fd;
+}
+
+.dataset-wide {
+  margin-top: 20px;
+}
+
+.schema-wrap {
+  overflow: hidden;
+}
+
+.schema {
+  width: 100%;
+  margin-top: 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.code-block {
+  /* *INFO: El bloque negro corta visualmente y hace que nombres de archivo,
+     *INFO: trozos de SQL y pistas se lean como material tecnico real. */
+  margin-top: 16px;
+  padding: 18px;
+  border-radius: var(--radius-md);
+  background: #000;
+  color: #a7f3d0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+}
+
+.mini-title {
+  margin: 0 0 12px;
+  font-size: 1rem;
+  color: #fff;
+}
+
+.compact-note {
+  margin-top: 4px;
+}
+
+.bullet-list {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--ink-soft);
+}
+
+.top-actions {
+  margin-bottom: 18px;
+}
+
+.panel-actions,
+.lab-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.lab-shell {
+  display: grid;
+  gap: 18px;
+}
+
+.lab-columns {
+  /* *INFO: Visor y editor a dos columnas para que el alumno compare el script
+     *INFO: original con la consulta que esta probando en ese momento. */
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.viewer,
+.query-box {
+  width: 100%;
+  min-height: 320px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #000;
+  color: #e2e8f0;
+  padding: 20px;
+  overflow: auto;
+  white-space: pre-wrap;
+  font-family: var(--font-mono);
+  font-size: 0.94rem;
+  line-height: 1.6;
+  box-shadow: inset 0 5px 20px rgba(0, 0, 0, 0.5);
+}
+
+.query-box {
+  resize: vertical;
+  outline: none;
+}
+
+.query-box:focus {
+  border-color: var(--accent);
+  box-shadow: inset 0 5px 20px rgba(0, 0, 0, 0.5), 0 0 0 2px rgba(56, 189, 248, 0.2);
+}
+
+.script-button,
+.quick-button {
+  width: 100%;
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.script-button.active,
+.quick-button.active {
+  /* *INFO: El estado activo evita una duda muy comun: "que archivo tengo
+     *INFO: cargado ahora mismo en el visor o que ejemplo acabo de lanzar?". */
+  background: rgba(139, 92, 246, 0.18);
+  border-color: rgba(139, 92, 246, 0.45);
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.26);
+}
+
+.results {
+  /* *INFO: El resultado se apila por bloques para soportar varias SELECT en una
+     *INFO: sola ejecucion, algo muy util al repasar un archivo completo. */
+  display: grid;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.result-block {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.result-block h3 {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  font-size: 1rem;
+}
+
+.table-wrapper {
+  overflow: auto;
+}
+
+.empty-message {
+  padding: 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--ink-soft);
+}
+
+.lab-status {
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+.lab-status[data-variant="error"] {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #fda4af;
+}
+
+.practice-card details,
+.note-card details {
+  /* *INFO: Los desplegables guardan pistas y errores sin saturar la pagina. Asi
+     *INFO: el alumno puede descubrir ayuda solo cuando la necesita. */
+  margin-top: 16px;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: #fff;
+}
+
+.footer-note {
+  margin-top: 80px;
+  padding: 32px;
+  border-radius: var(--radius-xl);
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid var(--line);
+  text-align: center;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 1120px) {
+  .hero,
+  .lab-grid,
+  .tables-grid,
+  .practice-grid,
+  .notes-grid,
+  .lab-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .lab-grid > .lab-card:first-child {
+    position: static;
+  }
+
+  .topbar-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: var(--radius-md);
+  }
+}
+
+@media (max-width: 720px) {
+  /* !IMPORTANT: En pantallas pequenas se reduce el espaciado para mantener el
+     !IMPORTANT: enfoque en el contenido y evitar scroll horizontal innecesario. */
+  .page {
+    padding: 24px 16px 60px;
+  }
+
+  .hero,
+  .hero-card,
+  .module-card,
+  .table-card,
+  .dataset-card,
+  .practice-card,
+  .note-card,
+  .lab-card {
+    padding: 20px;
+  }
+
+  .display {
+    font-size: 2.55rem;
+  }
+
+  .hero-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .modules-grid,
+  .practice-grid,
+  .notes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .rel-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}

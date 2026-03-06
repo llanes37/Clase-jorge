@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Curso SQL Nivel 0 - Gimnasio Interactivo</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-mark">SQL</div>
+        <div>
+          <div>Gimnasio SQL</div>
+          <small>Academia interactiva para crear, cargar, consultar y comprobar</small>
+        </div>
+      </div>
+      <nav class="topnav">
+        <a href="#mapa">Mapa</a>
+        <a href="#ruta">Ruta</a>
+        <a href="#scripts">Scripts</a>
+        <a href="#lab">Laboratorio</a>
+        <a href="#practicas">Practicas</a>
+        <a href="#errores">Errores</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="hero">
+      <div>
+        <span class="eyebrow">Practica completa de base de datos para DAW</span>
+        <h1 class="display">Estudia el gimnasio como una academia visual y practica SQL de verdad.</h1>
+        <p class="lead">
+          Esta pagina aprovecha todos los scripts ya preparados para Oracle y los convierte en una ruta de estudio
+          mas clara: modelo visual, orden de trabajo, laboratorio SQL local, ejercicios guiados y checklist final.
+        </p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#lab">Ir al laboratorio</a>
+          <a class="btn secondary" href="#ruta">Ver ruta de estudio</a>
+        </div>
+      </div>
+
+      <div class="hero-side">
+        <section class="hero-card">
+          <h3>Que vas a trabajar aqui</h3>
+          <div class="hero-list">
+            <div class="hero-chip"><span>Crear tablas</span><code>CREATE TABLE</code></div>
+            <div class="hero-chip"><span>Cargar datos</span><code>INSERT INTO</code></div>
+            <div class="hero-chip"><span>Relacionar tablas</span><code>JOIN</code></div>
+            <div class="hero-chip"><span>Filtrar</span><code>WHERE</code></div>
+            <div class="hero-chip"><span>Agrupar</span><code>COUNT + GROUP BY</code></div>
+            <div class="hero-chip"><span>Comprobar</span><code>SELECT + COUNT</code></div>
+          </div>
+        </section>
+
+        <section class="hero-card">
+          <div class="hero-stats">
+            <div class="stat">
+              <strong id="metric-tables">0</strong>
+              <span>tablas del simulador</span>
+            </div>
+            <div class="stat">
+              <strong id="metric-rows">0</strong>
+              <span>filas cargadas</span>
+            </div>
+            <div class="stat">
+              <strong id="metric-queries">0</strong>
+              <span>consultas guiadas</span>
+            </div>
+            <div class="stat">
+              <strong>1</strong>
+              <span>practica completa</span>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="section" id="mapa">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Mapa visual del gimnasio</h2>
+          <p class="section-copy">
+            Antes de consultar, hay que entender el modelo. Aqui tienes las tablas importantes y la logica de relaciones que
+            luego usaras en los `JOIN`.
+          </p>
+        </div>
+      </div>
+
+      <div class="tables-grid">
+        <article class="table-card">
+          <div class="tag-row">
+            <span class="tag">Tabla base</span>
+            <span class="tag">8 alumnos</span>
+          </div>
+          <h3>talumnos_g</h3>
+          <p>Tabla principal del gimnasio. Sirve para practicar ordenacion, filtros y busquedas por telefono o estado.</p>
+          <div class="table-visual">
+            <table>
+              <thead>
+                <tr><th>idalumno</th><th>nombre</th><th>apellidos</th><th>activo</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>1</td><td>LUISA</td><td>NUNEZ GIL</td><td>s</td></tr>
+                <tr><td>3</td><td>CLARA</td><td>DE LA TORRE HUERTAS</td><td>s</td></tr>
+                <tr><td>6</td><td>RITA</td><td>LOPEZ VERDUGO</td><td>s</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="table-card">
+          <div class="tag-row">
+            <span class="tag">Tabla base</span>
+            <span class="tag">6 actividades</span>
+          </div>
+          <h3>tactividades_g</h3>
+          <p>Aqui esta la oferta del gimnasio. Es perfecta para explicar profesores, actividades activas e inactivas.</p>
+          <div class="table-visual">
+            <table>
+              <thead>
+                <tr><th>idactividad</th><th>descripcion</th><th>idprofesor</th><th>activa</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>1</td><td>HALTEROFILIA</td><td>1</td><td>s</td></tr>
+                <tr><td>4</td><td>GIMNASIA</td><td>3</td><td>s</td></tr>
+                <tr><td>6</td><td>JUDO</td><td>1</td><td>n</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="table-card">
+          <div class="tag-row">
+            <span class="tag">Relacion N:M</span>
+            <span class="tag">16 clases</span>
+          </div>
+          <h3>talu_activ</h3>
+          <p>Es la tabla clave para aprender `JOIN`. Une alumnos con actividades realizadas y añade la fecha.</p>
+          <div class="table-visual">
+            <table>
+              <thead>
+                <tr><th>idalumno</th><th>idactividad</th><th>fecha</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>3</td><td>1</td><td>01/01/2022</td></tr>
+                <tr><td>1</td><td>4</td><td>01/04/2022</td></tr>
+                <tr><td>7</td><td>4</td><td>01/04/2022</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+      </div>
+
+      <div class="dataset-card dataset-wide">
+        <h3>Relaciones que debes tener claras</h3>
+        <p>Si fallas aqui, luego fallan los `JOIN`. El objetivo es que el alumno vea la relacion antes de escribir la consulta.</p>
+        <div class="rel-row">
+          <div class="link-pill">tprofesores_g.idprofesor</div>
+          <div>se relaciona con</div>
+          <div class="link-pill">tactividades_g.idprofesor</div>
+          <div>para saber quien imparte la actividad</div>
+          <div class="link-pill">1:N</div>
+        </div>
+        <div class="rel-row">
+          <div class="link-pill">talumnos_g.idalumno</div>
+          <div>se relaciona con</div>
+          <div class="link-pill">talu_activ.idalumno</div>
+          <div>para saber que actividades realiza cada alumno</div>
+          <div class="link-pill">1:N</div>
+        </div>
+        <div class="rel-row">
+          <div class="link-pill">tactividades_g.idactividad</div>
+          <div>se relaciona con</div>
+          <div class="link-pill">talu_activ.idactividad</div>
+          <div>para convertir ids en nombres de actividades</div>
+          <div class="link-pill">1:N</div>
+        </div>
+      </div>
+
+      <div class="dataset-card dataset-wide schema-wrap">
+        <h3>Esquema general</h3>
+        <p>Vista rapida del modelo completo, incluida la tabla de recibos como ampliacion.</p>
+        <img class="schema" src="./assets/esquema_gimnasio.svg" alt="Esquema relacional del gimnasio">
+      </div>
+    </section>
+
+    <section class="section" id="ruta">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Ruta completa de estudio</h2>
+          <p class="section-copy">
+            Esta es la forma correcta de trabajar la practica en clase y en casa. La idea no es abrir archivos al azar, sino seguir un orden.
+          </p>
+        </div>
+      </div>
+
+      <div class="modules-grid">
+        <article class="module-card">
+          <div class="tag-row"><span class="tag">Paso 1</span><span class="tag">Estructura</span></div>
+          <h3>Crear las tablas</h3>
+          <p>Empieza por las tablas y entiende PK, FK, `CHECK` y `DEFAULT`.</p>
+          <div class="code-block">01_creacion_tablas_gimnasio.sql</div>
+        </article>
+        <article class="module-card">
+          <div class="tag-row"><span class="tag">Paso 2</span><span class="tag">Datos</span></div>
+          <h3>Cargar el dataset</h3>
+          <p>Inserta primero tablas padre y luego tablas hijas para evitar errores de integridad referencial.</p>
+          <div class="code-block">02_carga_datos_gimnasio.sql</div>
+        </article>
+        <article class="module-card">
+          <div class="tag-row"><span class="tag">Paso 3</span><span class="tag">Control</span></div>
+          <h3>Verificar que todo cuadra</h3>
+          <p>Comprueba los conteos antes de hacer consultas. Si esto falla, el resto tambien.</p>
+          <div class="code-block">05_verificaciones_gimnasio.sql</div>
+        </article>
+        <article class="module-card">
+          <div class="tag-row"><span class="tag">Paso 4</span><span class="tag">Practica</span></div>
+          <h3>Resolver consultas</h3>
+          <p>Trabaja el archivo de alumno y construye `SELECT`, `JOIN`, `LEFT JOIN` y `GROUP BY` paso a paso.</p>
+          <div class="code-block">03_consultas_gimnasio_alumno.sql</div>
+        </article>
+        <article class="module-card">
+          <div class="tag-row"><span class="tag">Paso 5</span><span class="tag">Correccion</span></div>
+          <h3>Comparar con soluciones</h3>
+          <p>Usa las soluciones solo al final para corregir y entender por que cada consulta esta hecha asi.</p>
+          <div class="code-block">04_consultas_gimnasio_soluciones.sql</div>
+        </article>
+        <article class="module-card">
+          <div class="tag-row"><span class="tag">Paso 6</span><span class="tag">Repaso</span></div>
+          <h3>Usar la guia</h3>
+          <p>El `README.md` resume el modelo, los casos limite, los ejercicios extra y la forma correcta de ejecutar.</p>
+          <div class="code-block">README.md</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="scripts">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Material de la carpeta</h2>
+          <p class="section-copy">
+            Todo el material de la practica esta centralizado aqui. Los enlaces abren el archivo real de la carpeta.
+          </p>
+        </div>
+      </div>
+
+      <div class="practice-grid">
+        <article class="practice-card">
+          <h3>Scripts Oracle</h3>
+          <p>Son los archivos que se deben ejecutar en SQL Developer o en tu entorno Oracle real.</p>
+          <div class="link-stack">
+            <a class="link-pill file-link" href="./01_creacion_tablas_gimnasio.sql">01_creacion_tablas_gimnasio.sql</a>
+            <a class="link-pill file-link" href="./02_carga_datos_gimnasio.sql">02_carga_datos_gimnasio.sql</a>
+            <a class="link-pill file-link" href="./03_consultas_gimnasio_alumno.sql">03_consultas_gimnasio_alumno.sql</a>
+            <a class="link-pill file-link" href="./04_consultas_gimnasio_soluciones.sql">04_consultas_gimnasio_soluciones.sql</a>
+            <a class="link-pill file-link" href="./05_verificaciones_gimnasio.sql">05_verificaciones_gimnasio.sql</a>
+          </div>
+        </article>
+        <article class="practice-card">
+          <h3>Material de apoyo</h3>
+          <p>Documentacion, esquema y PDF original del ejercicio para mantener todo junto y ordenado.</p>
+          <div class="link-stack">
+            <a class="link-pill file-link" href="./README.md">README.md</a>
+            <a class="link-pill file-link" href="./UT 5 -- C - Tarea 6 - PS.pdf">PDF original</a>
+            <a class="link-pill file-link" href="./assets/esquema_gimnasio.svg">Esquema SVG</a>
+            <a class="link-pill file-link" href="./assets/browser_setup.sql">Dataset del navegador</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="lab">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Laboratorio SQL</h2>
+          <p class="section-copy">
+            Este laboratorio es un apoyo rapido para probar `SELECT` y `JOIN` en local. El trabajo real de Oracle sigue yendo en los scripts `.sql`.
+          </p>
+        </div>
+      </div>
+
+      <div class="lab-grid">
+        <article class="lab-card">
+          <h3>Explorador de scripts</h3>
+          <p>Selecciona un archivo para verlo, copiarlo o pasarlo al editor.</p>
+          <div class="lab-shell">
+            <div>
+              <h4 class="mini-title">Scripts</h4>
+              <div class="script-list" id="script-list"></div>
+            </div>
+            <div>
+              <h4 class="mini-title">Consultas rapidas</h4>
+              <div class="quick-list" id="quick-list"></div>
+            </div>
+            <div class="note-card compact-note">
+              <h3>Reglas del laboratorio</h3>
+              <p>Usalo para practicar lectura y relaciones. Si una consulta debe validarse de verdad en Oracle, hazlo en los scripts del curso.</p>
+              <ul class="bullet-list">
+                <li>Primero reinicia el dataset si has hecho varias pruebas.</li>
+                <li>Despues abre un script y mandalo al editor si quieres retocarlo.</li>
+                <li>Si algo falla, revisa el bloque de verificaciones.</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="lab-card">
+          <h3>Editor y resultados</h3>
+          <div class="panel-actions top-actions">
+            <button class="secondary" id="copy-viewer" type="button">Copiar script</button>
+            <button class="secondary" id="load-viewer-into-editor" type="button">Pasar al editor</button>
+            <button class="secondary" id="reset-db" type="button">Reset dataset</button>
+            <button class="primary" id="run-sql" type="button">Ejecutar consulta</button>
+          </div>
+
+          <div class="lab-columns">
+            <div>
+              <h4 class="mini-title">Visor del script</h4>
+              <pre class="viewer" id="script-viewer"></pre>
+            </div>
+            <div>
+              <h4 class="mini-title">Editor SQL</h4>
+              <textarea class="query-box" id="editor" spellcheck="false">SELECT * FROM talumnos_g ORDER BY apellidos;</textarea>
+            </div>
+          </div>
+
+          <div class="lab-actions">
+            <div class="lab-status" id="status" data-variant="ok">Esperando la primera consulta.</div>
+          </div>
+
+          <div class="results" id="results"></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="practicas">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Practicas guiadas del gimnasio</h2>
+          <p class="section-copy">
+            Estas tarjetas resumen lo que debes saber hacer. Son el puente entre el archivo del alumno y las soluciones.
+          </p>
+        </div>
+      </div>
+
+      <div class="practice-grid">
+        <article class="practice-card">
+          <h3>Practica 1: Listar alumnos</h3>
+          <p>Empieza con un `SELECT` sencillo y añade `ORDER BY` para no depender del orden interno de la tabla.</p>
+          <div class="code-block">SELECT * FROM talumnos_g ORDER BY apellidos, nombre;</div>
+          <details>
+            <summary>Que debes vigilar</summary>
+            <p>No asumas nunca que una tabla sale ordenada sola. Si quieres orden, lo pides con `ORDER BY`.</p>
+          </details>
+        </article>
+
+        <article class="practice-card">
+          <h3>Practica 2: Filtrar actividades inactivas</h3>
+          <p>Trabaja `WHERE` sobre una columna corta y controlada: `activa`.</p>
+          <div class="code-block">SELECT descripcion FROM tactividades_g WHERE activa = 'n';</div>
+          <details>
+            <summary>Error tipico</summary>
+            <p>Escribir `n` sin comillas o comparar con mayusculas si los datos estan en minuscula.</p>
+          </details>
+        </article>
+
+        <article class="practice-card">
+          <h3>Practica 3: Actividad y profesor</h3>
+          <p>Une actividades con profesores para dejar de ver ids sueltos y pasar a datos legibles.</p>
+          <div class="code-block">JOIN tprofesores_g p ON p.idprofesor = a.idprofesor</div>
+          <details>
+            <summary>Idea clave</summary>
+            <p>Un `JOIN` sirve para convertir claves foraneas en informacion que el usuario entiende.</p>
+          </details>
+        </article>
+
+        <article class="practice-card">
+          <h3>Practica 4: Alumno + actividad + fecha</h3>
+          <p>Aqui ya aparecen tres tablas. Es la consulta que de verdad enseña el modelo relacional.</p>
+          <div class="code-block">talumnos_g + talu_activ + tactividades_g</div>
+          <details>
+            <summary>Caso limite</summary>
+            <p>Si saltas la tabla `talu_activ`, el cruce entre alumno y actividad sera incorrecto.</p>
+          </details>
+        </article>
+
+        <article class="practice-card">
+          <h3>Practica 5: Alumnos sin clases</h3>
+          <p>Muy buena para aprender `LEFT JOIN` y detectar ausencias en una relacion.</p>
+          <div class="code-block">WHERE ta.idalumno IS NULL</div>
+          <details>
+            <summary>Error tipico</summary>
+            <p>No se usa `= NULL`. En SQL se usa `IS NULL`.</p>
+          </details>
+        </article>
+
+        <article class="practice-card">
+          <h3>Practica 6: Quien hace mas actividades</h3>
+          <p>Pasas de ver filas sueltas a resumir informacion con `COUNT`, `GROUP BY` y ranking.</p>
+          <div class="code-block">COUNT(*) + GROUP BY + DENSE_RANK()</div>
+          <details>
+            <summary>Para que sirve</summary>
+            <p>Sirve para pasar de consultas descriptivas a consultas de analisis, algo muy util en examen.</p>
+          </details>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="errores">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Errores tipicos y arreglo rapido</h2>
+          <p class="section-copy">
+            Tener estos fallos visibles ahorra mucho tiempo en clase porque son exactamente los bloqueos que aparecen al empezar.
+          </p>
+        </div>
+      </div>
+
+      <div class="notes-grid">
+        <article class="note-card">
+          <h3>Insertar antes de crear</h3>
+          <p>Si intentas ejecutar la carga antes de la creacion, Oracle no encontrara las tablas.</p>
+        </article>
+        <article class="note-card">
+          <h3>Hacer JOIN directo</h3>
+          <p>No unas `talumnos_g` con `tactividades_g` sin pasar por `talu_activ`.</p>
+        </article>
+        <article class="note-card">
+          <h3>Olvidar el COMMIT</h3>
+          <p>Si no confirmas la carga, luego parece que faltan datos aunque el script se haya ejecutado.</p>
+        </article>
+        <article class="note-card">
+          <h3>Comparar con NULL mal</h3>
+          <p>`= NULL` no funciona como se espera. Debes usar `IS NULL` o `IS NOT NULL`.</p>
+        </article>
+        <article class="note-card">
+          <h3>GROUP BY incompleto</h3>
+          <p>Si muestras columnas no agregadas, deben aparecer tambien en el `GROUP BY`.</p>
+        </article>
+        <article class="note-card">
+          <h3>Confundir HTML con Oracle</h3>
+          <p>El laboratorio es de apoyo. La validacion final de la practica sigue siendo Oracle con los scripts `.sql`.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="footer-note">
+      <p>
+        Ruta recomendada: primero revisa el mapa, luego ejecuta creacion y carga en Oracle, despues practica en el laboratorio,
+        resuelve el archivo del alumno y termina comparando con soluciones.
+      </p>
+    </section>
+  </main>
+
+  <script src="./vendor/sql-wasm.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>

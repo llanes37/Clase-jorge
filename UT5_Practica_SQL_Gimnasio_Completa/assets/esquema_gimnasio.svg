@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="720" viewBox="0 0 1180 720" role="img" aria-labelledby="title desc">
+  <title id="title">Esquema de la base de datos del gimnasio</title>
+  <desc id="desc">Diagrama con las tablas alumnos, profesores, actividades, clases, demandas y recibos.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f7f1e8; }
+      .box { fill: #fffdf9; stroke: #6e4a2f; stroke-width: 2; rx: 18; ry: 18; }
+      .head { fill: #d96f32; }
+      .title { font: 700 22px 'Segoe UI', sans-serif; fill: #fff; }
+      .text { font: 15px 'Consolas', monospace; fill: #2a1a12; }
+      .line { stroke: #3c6e71; stroke-width: 4; fill: none; }
+      .hint { font: 700 15px 'Segoe UI', sans-serif; fill: #3c6e71; }
+    </style>
+  </defs>
+  <rect class="bg" width="1180" height="720"/>
+  <g transform="translate(50 40)">
+    <rect class="box" x="0" y="0" width="280" height="190"/>
+    <rect class="head" x="0" y="0" width="280" height="42"/>
+    <text class="title" x="20" y="28">talumnos_g</text>
+    <text class="text" x="20" y="70">PK idalumno</text>
+    <text class="text" x="20" y="98">nombre</text>
+    <text class="text" x="20" y="126">apellidos</text>
+    <text class="text" x="20" y="154">telefono</text>
+    <text class="text" x="20" y="182">activo</text>
+  </g>
+  <g transform="translate(440 40)">
+    <rect class="box" x="0" y="0" width="300" height="160"/>
+    <rect class="head" x="0" y="0" width="300" height="42"/>
+    <text class="title" x="20" y="28">tprofesores_g</text>
+    <text class="text" x="20" y="70">PK idprofesor</text>
+    <text class="text" x="20" y="98">nombre</text>
+    <text class="text" x="20" y="126">apellidos</text>
+  </g>
+  <g transform="translate(830 40)">
+    <rect class="box" x="0" y="0" width="300" height="190"/>
+    <rect class="head" x="0" y="0" width="300" height="42"/>
+    <text class="title" x="20" y="28">tactividades_g</text>
+    <text class="text" x="20" y="70">PK idactividad</text>
+    <text class="text" x="20" y="98">descripcion</text>
+    <text class="text" x="20" y="126">FK idprofesor</text>
+    <text class="text" x="20" y="154">activa</text>
+  </g>
+  <g transform="translate(180 310)">
+    <rect class="box" x="0" y="0" width="330" height="180"/>
+    <rect class="head" x="0" y="0" width="330" height="42"/>
+    <text class="title" x="20" y="28">talu_activ</text>
+    <text class="text" x="20" y="70">PK/FK idalumno</text>
+    <text class="text" x="20" y="98">PK/FK idactividad</text>
+    <text class="text" x="20" y="126">PK fecha</text>
+    <text class="text" x="20" y="154">Relacion N:M real</text>
+  </g>
+  <g transform="translate(660 310)">
+    <rect class="box" x="0" y="0" width="350" height="170"/>
+    <rect class="head" x="0" y="0" width="350" height="42"/>
+    <text class="title" x="20" y="28">talu_activ_demand</text>
+    <text class="text" x="20" y="70">PK/FK idalumno</text>
+    <text class="text" x="20" y="98">PK/FK idactividad</text>
+    <text class="text" x="20" y="126">Relacion N:M demandada</text>
+  </g>
+  <g transform="translate(420 560)">
+    <rect class="box" x="0" y="0" width="330" height="130"/>
+    <rect class="head" x="0" y="0" width="330" height="42"/>
+    <text class="title" x="20" y="28">trecibos_g</text>
+    <text class="text" x="20" y="70">PK/FK idalumno</text>
+    <text class="text" x="20" y="98">femision, fpago, importe</text>
+  </g>
+  <path class="line" d="M330 135 C390 135, 390 120, 440 120"/>
+  <path class="line" d="M740 120 C790 120, 790 135, 830 135"/>
+  <path class="line" d="M190 230 C190 270, 240 290, 345 310"/>
+  <path class="line" d="M980 230 C980 270, 930 290, 850 310"/>
+  <path class="line" d="M190 230 C190 295, 450 520, 520 560"/>
+  <path class="line" d="M345 490 C345 560, 470 560, 470 560"/>
+  <text class="hint" x="470" y="92">1 profesor imparte varias actividades</text>
+  <text class="hint" x="70" y="292">1 alumno puede recibir varias actividades</text>
+  <text class="hint" x="685" y="292">1 actividad puede ser demandada por varios alumnos</text>
+  <text class="hint" x="770" y="610">1 alumno puede tener varios recibos</text>
+</svg>
