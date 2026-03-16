@@ -1,0 +1,1226 @@
+<!--
+========================================================================
+UT4 - JAVASCRIPT TEORIA INTERACTIVA
+========================================================================
+Autor: apoyo docente
+Objetivo general:
+  - Crear una clase HTML autocontenida, visual e interactiva.
+  - Explicar el temario de teoria visto en la captura del alumno.
+  - Mantener comentarios utiles para que el archivo tambien sirva
+    como guia editable dentro de Live Server.
+
+Guia rapida de comentarios:
+  ! Importante  -> idea clave que no conviene olvidar
+  ? Nota        -> aclaracion o matiz util
+  * Ejemplo     -> caso practico o recomendacion
+  TODO Alumno   -> propuesta de ejercicio para practicar
+
+Temario cubierto:
+  0. Introduccion a JavaScript
+  0.1 Donde situar la etiqueta <script>
+  1. Diferencias entre var y let
+  1.1 Hoisting
+  2. Formas de escribir desde JS en HTML
+  3. Carga de scripts: normal, defer, async, DOMContentLoaded y load
+  4. Diferencias entre innerHTML, innerText y textContent
+========================================================================
+-->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UT4 - JavaScript teoria interactiva</title>
+  <style>
+    :root {
+      --bg-1: #f4efe6;
+      --bg-2: #dce8f2;
+      --panel: rgba(255, 255, 255, 0.86);
+      --panel-strong: #fffdfa;
+      --ink: #243447;
+      --muted: #5d6b78;
+      --line: #d6dde5;
+      --brand: #0f766e;
+      --brand-2: #c96f2d;
+      --brand-soft: #e7f7f4;
+      --shadow: 0 20px 45px rgba(36, 52, 71, 0.12);
+      --radius-xl: 24px;
+      --radius-lg: 18px;
+      --code-bg: #1c2430;
+      --code-ink: #eef6ff;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Trebuchet MS", Verdana, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.8), transparent 28%),
+        linear-gradient(135deg, var(--bg-1), var(--bg-2));
+      min-height: 100vh;
+    }
+
+    .page-shell {
+      width: min(1280px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 48px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, rgba(15, 118, 110, 0.92), rgba(201, 111, 45, 0.9));
+      color: #fff;
+      border-radius: 28px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -40px -70px auto;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.16);
+      font-size: 0.9rem;
+      letter-spacing: 0.03em;
+    }
+
+    h1, h2, h3 {
+      font-family: Georgia, "Times New Roman", serif;
+      margin-top: 0;
+      letter-spacing: 0.01em;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 3.8vw, 3.4rem);
+      margin: 16px 0 12px;
+      max-width: 12ch;
+    }
+
+    .hero p {
+      max-width: 70ch;
+      margin: 0;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    .status-row, .hero-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .pill, .hero-links a {
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 0.95rem;
+      text-decoration: none;
+    }
+
+    .pill {
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+
+    .hero-links a {
+      background: #fff;
+      color: var(--brand);
+      font-weight: 700;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      gap: 22px;
+      margin-top: 22px;
+      align-items: start;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 20px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(14px);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+    }
+
+    .sidebar-card, .section-card { padding: 20px; }
+    .sidebar-card h2 { font-size: 1.25rem; margin-bottom: 14px; }
+
+    .index-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .index-list a {
+      display: block;
+      text-decoration: none;
+      color: var(--ink);
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.55);
+      border: 1px solid var(--line);
+    }
+
+    .index-list a:hover,
+    .index-list a:focus-visible {
+      background: var(--brand-soft);
+      border-color: rgba(15, 118, 110, 0.25);
+      outline: none;
+    }
+
+    .sidebar-note {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    .content { display: grid; gap: 22px; }
+    .section-card { background: var(--panel-strong); }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: start;
+      margin-bottom: 18px;
+    }
+
+    .section-kicker {
+      color: var(--brand-2);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.84rem;
+      margin-bottom: 8px;
+    }
+
+    .section-lead, .plain-text, .tip-box p, .result, .demo-note, .timeline li, li {
+      line-height: 1.65;
+    }
+
+    .section-lead {
+      margin: 0;
+      color: var(--muted);
+      max-width: 70ch;
+    }
+
+    .grid-two {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      align-items: start;
+    }
+
+    .card-soft {
+      background: linear-gradient(180deg, rgba(231, 247, 244, 0.8), rgba(255, 255, 255, 0.94));
+      border: 1px solid rgba(15, 118, 110, 0.14);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+    }
+
+    .card-warm {
+      background: linear-gradient(180deg, rgba(255, 242, 228, 0.8), rgba(255, 255, 255, 0.96));
+      border: 1px solid rgba(201, 111, 45, 0.15);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+    }
+
+    .mini-title { margin: 0 0 10px; font-size: 1.06rem; }
+    .check-list { margin: 0; padding-left: 18px; }
+
+    .tip-box {
+      margin-top: 18px;
+      padding: 16px 18px;
+      border-radius: 16px;
+      background: #f7fafc;
+      border: 1px dashed #c8d3df;
+    }
+
+    .demo-zone {
+      margin-top: 18px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--line);
+      background: #fdfdfc;
+      overflow: hidden;
+    }
+
+    .demo-toolbar {
+      padding: 14px;
+      border-bottom: 1px solid var(--line);
+      background: #faf7f1;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    button, input, select { font: inherit; }
+
+    button {
+      border: 1px solid rgba(15, 118, 110, 0.2);
+      background: #fff;
+      color: var(--ink);
+      border-radius: 12px;
+      padding: 10px 14px;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+
+    button:hover,
+    button:focus-visible {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 25px rgba(15, 118, 110, 0.12);
+      border-color: rgba(15, 118, 110, 0.34);
+      outline: none;
+    }
+
+    .button-brand {
+      background: var(--brand);
+      color: #fff;
+      border-color: transparent;
+    }
+
+    input, select {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px 12px;
+      min-width: 200px;
+    }
+
+    .demo-body {
+      padding: 16px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .result,
+    .compare-output,
+    .source-box,
+    .sandbox-frame {
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 14px;
+    }
+
+    .result { min-height: 70px; white-space: pre-wrap; }
+    .demo-note { margin: 0; color: var(--muted); font-size: 0.95rem; }
+    .sandbox-frame { width: 100%; min-height: 150px; background: #fffefa; }
+
+    pre {
+      margin: 18px 0 0;
+      background: var(--code-bg);
+      color: var(--code-ink);
+      border-radius: 18px;
+      padding: 16px;
+      overflow-x: auto;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    code {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.94rem;
+    }
+
+    .inline-code {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 8px;
+      background: #f0f4f8;
+      border: 1px solid #d8e1ea;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.92rem;
+    }
+
+    .timeline { margin: 0; padding-left: 18px; }
+    .timeline li + li { margin-top: 8px; }
+    .source-box.is-hidden span { display: none; }
+    .compare-output { min-height: 90px; white-space: pre-wrap; }
+    .footer-card { padding: 22px; text-align: center; color: var(--muted); font-size: 0.96rem; }
+
+    @media (max-width: 980px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      .grid-two { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .page-shell { width: min(100% - 18px, 1280px); padding-top: 14px; }
+      .hero, .sidebar-card, .section-card, .footer-card { padding: 18px; }
+      .demo-toolbar { flex-direction: column; align-items: stretch; }
+      input, select, button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <div class="eyebrow">UT4 - JavaScript - teoria con practica guiada</div>
+      <h1>Clase interactiva basada en el temario de teoria</h1>
+      <p>
+        Este archivo esta pensado para abrirse con Live Server, tocar el codigo y ver al momento
+        como responde el navegador. La idea es explicar la teoria sin perder la parte practica.
+      </p>
+      <div class="status-row">
+        <div class="pill" id="statusScript">Script principal ejecutado</div>
+        <div class="pill" id="statusDom">Esperando DOMContentLoaded</div>
+        <div class="pill" id="statusLoad">Esperando window load</div>
+      </div>
+      <div class="hero-links">
+        <a href="#indice">Ir al indice</a>
+        <a href="#carga-scripts">Ver carga de scripts</a>
+        <a href="#comparacion-textos">Comparar innerHTML e innerText</a>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <section class="panel sidebar-card" id="indice">
+          <h2>Indice rapido</h2>
+          <nav aria-label="Indice del temario">
+            <ul class="index-list">
+              <li><a href="#introduccion">0. Introduccion</a></li>
+              <li><a href="#etiqueta-script">0.1 Etiqueta script</a></li>
+              <li><a href="#var-let">1. var vs let</a></li>
+              <li><a href="#hoisting">1.1 Hoisting</a></li>
+              <li><a href="#escritura-js">2. Escribir desde JS</a></li>
+              <li><a href="#carga-scripts">3. Carga de scripts</a></li>
+              <li><a href="#comparacion-textos">4. innerHTML, innerText y textContent</a></li>
+            </ul>
+          </nav>
+        </section>
+
+        <section class="panel sidebar-card">
+          <h2>Como usar esta clase</h2>
+          <p class="sidebar-note">
+            Lee la explicacion, pulsa los botones, abre la consola con F12 y modifica
+            los ejemplos. El archivo esta comentado para que el alumno entienda tanto
+            el resultado como el por que.
+          </p>
+        </section>
+
+        <section class="panel sidebar-card">
+          <h2>Idea docente</h2>
+          <p class="sidebar-note">
+            Cuando algo sea teorico, intenta unirlo a una pregunta concreta:
+            "que pasa si lo hago antes de que exista el DOM", "que variable sobrevive
+            al bloque", "que metodo interpreta HTML y cual no".
+          </p>
+        </section>
+      </aside>
+
+      <main class="content">
+        <!-- =========================================================
+        SECCION 0 - INTRODUCCION A JAVASCRIPT
+        ========================================================== -->
+        <section class="panel section-card" id="introduccion">
+          <div class="section-head">
+            <div>
+              <div class="section-kicker">Bloque 0</div>
+              <h2>Introduccion a JavaScript</h2>
+              <p class="section-lead">
+                JavaScript da comportamiento a la pagina: responde a eventos, calcula,
+                valida, crea contenido y modifica el DOM que el usuario ve en pantalla.
+              </p>
+            </div>
+          </div>
+
+          <div class="grid-two">
+            <article class="card-soft">
+              <h3 class="mini-title">Que hace JS en una web</h3>
+              <ul class="check-list">
+                <li>Escucha acciones del usuario: clic, teclado, scroll, envio de formularios.</li>
+                <li>Lee datos de inputs, botones, textos e imagenes.</li>
+                <li>Cambia el HTML y el CSS sin recargar la pagina.</li>
+                <li>Puede guardar informacion en el navegador.</li>
+              </ul>
+            </article>
+
+            <article class="card-warm">
+              <h3 class="mini-title">Flujo mental rapido</h3>
+              <ul class="check-list">
+                <li>1. El navegador construye el DOM a partir del HTML.</li>
+                <li>2. JavaScript se ejecuta y selecciona elementos.</li>
+                <li>3. Una accion dispara una funcion.</li>
+                <li>4. El usuario ve el cambio en la interfaz.</li>
+              </ul>
+            </article>
+          </div>
+
+          <div class="tip-box">
+            <p>
+              <strong>Regla util:</strong> si el alumno no ve el resultado, suele costarle
+              mas entender la teoria. Por eso cada bloque de esta clase intenta mostrar
+              la salida dentro de la propia pagina.
+            </p>
+          </div>
+
+          <div class="demo-zone">
+            <div class="demo-toolbar">
+              <button type="button" class="button-brand" id="introButton">Lanzar mini demo</button>
+            </div>
+            <div class="demo-body">
+              <div class="result" id="introResult">
+                Pulsa el boton para ver una accion sencilla hecha con JavaScript.
+              </div>
+              <p class="demo-note">
+                Esta demo no hace nada complejo: solo muestra el patron basico
+                evento -&gt; funcion -&gt; cambio visible.
+              </p>
+            </div>
+          </div>
+
+          <pre><code>// Patron minimo de interaccion
+boton.addEventListener("click", function () {
+  caja.textContent = "JavaScript acaba de reaccionar al clic";
+});</code></pre>
+
+          <!-- TODO Alumno:
+               Cambia el texto del resultado y anade la hora actual usando new Date(). -->
+        </section>
+
+        <!-- =========================================================
+        SECCION 0.1 - DONDE SITUAR LA ETIQUETA SCRIPT
+        ========================================================== -->
+        <section class="panel section-card" id="etiqueta-script">
+          <div class="section-head">
+            <div>
+              <div class="section-kicker">Bloque 0.1</div>
+              <h2>Donde situar la etiqueta <span class="inline-code">&lt;script&gt;</span></h2>
+              <p class="section-lead">
+                El sitio donde cargas JavaScript importa porque determina si el DOM ya existe,
+                si la pagina se bloquea y cuando empieza a ejecutarse el codigo.
+              </p>
+            </div>
+          </div>
+
+          <div class="grid-two">
+            <article class="card-soft">
+              <h3 class="mini-title">La recomendacion general</h3>
+              <ul class="check-list">
+                <li>Usar un archivo externo y cargarlo en el <span class="inline-code">&lt;head&gt;</span> con <span class="inline-code">defer</span>.</li>
+                <li>Asi el navegador sigue leyendo HTML y ejecuta el script cuando el DOM ya esta construido.</li>
+                <li>Tambien es valido poner el script al final del <span class="inline-code">&lt;body&gt;</span>.</li>
+              </ul>
+            </article>
+
+            <article class="card-warm">
+              <h3 class="mini-title">Error tipico</h3>
+              <p class="plain-text">
+                Si intentas seleccionar un elemento antes de que exista en el DOM,
+                normalmente obtendras <span class="inline-code">null</span> y despues fallara
+                cualquier acceso como <span class="inline-code">element.textContent</span>.
+              </p>
+            </article>
+          </div>
+
+          <pre><code>&lt;!-- Opcion recomendada --&gt;
+&lt;head&gt;
+  &lt;script src="app.js" defer&gt;&lt;/script&gt;
+&lt;/head&gt;
+
+&lt;!-- Opcion clasica --&gt;
+&lt;body&gt;
+  ...
+  &lt;script src="app.js"&gt;&lt;/script&gt;
+&lt;/body&gt;</code></pre>
+
+          <div class="demo-zone">
+            <div class="demo-toolbar">
+              <button type="button" id="checkDomButton">Comprobar si el DOM ya existe</button>
+              <div class="pill" style="color: var(--ink); background: #eef7f5; border-color: #d0e8e3;">Objetivo: ver por que importa el momento de carga</div>
+            </div>
+            <div class="demo-body">
+              <div class="result" id="scriptPlacementResult">
+                Este bloque se puede seleccionar porque el script principal esta colocado al final del body.
+              </div>
+            </div>
+          </div>
+
+          <!-- TODO Alumno:
+               Mueve este archivo a un ejemplo separado y prueba tres variantes:
+               1) script en head sin defer
+               2) script en head con defer
+               3) script al final del body -->
+        </section>
+
+        <!-- =========================================================
+        SECCION 1 - DIFERENCIAS ENTRE VAR Y LET
+        ========================================================== -->
+        <section class="panel section-card" id="var-let">
+          <div class="section-head">
+            <div>
+              <div class="section-kicker">Bloque 1</div>
+              <h2>Diferencias entre <span class="inline-code">var</span> y <span class="inline-code">let</span></h2>
+              <p class="section-lead">
+                Las dos crean variables, pero no se comportan igual. El punto mas importante
+                para iniciar suele ser el alcance o scope.
+              </p>
+            </div>
+          </div>
+
+          <div class="grid-two">
+            <article class="card-soft">
+              <h3 class="mini-title">Con var</h3>
+              <ul class="check-list">
+                <li>Tiene alcance de funcion, no de bloque.</li>
+                <li>Se puede redeclarar en el mismo ambito.</li>
+                <li>Su comportamiento historico provoca mas errores en codigo moderno.</li>
+              </ul>
+            </article>
+
+            <article class="card-warm">
+              <h3 class="mini-title">Con let</h3>
+              <ul class="check-list">
+                <li>Tiene alcance de bloque: if, for, while, etc.</li>
+                <li>No permite redeclarar en el mismo ambito.</li>
+                <li>Suele ser la mejor opcion para valores que cambian.</li>
+              </ul>
+            </article>
+          </div>
+
+          <div class="demo-zone">
+            <div class="demo-toolbar">
+              <button type="button" id="showVarButton" class="button-brand">Ver demo con var</button>
+              <button type="button" id="showLetButton">Ver demo con let</button>
+            </div>
+            <div class="demo-body">
+              <div class="result" id="scopeResult">
+                Aqui se mostrara la diferencia de alcance entre var y let.
+              </div>
+            </div>
+          </div>
+
+          <pre><code>if (true) {
+  var curso = "JavaScript";
+}
+console.log(curso); // existe
+
+if (true) {
+  let modulo = "DOM";
+}
+console.log(modulo); // error: modulo no existe fuera del bloque</code></pre>
+
+          <!-- TODO Alumno:
+               Prueba tambien const y explica cuando elegirias let o const. -->
+        </section>
+
+        <!-- =========================================================
+        SECCION 1.1 - HOISTING
+        ========================================================== -->
+        <section class="panel section-card" id="hoisting">
+          <div class="section-head">
+            <div>
+              <div class="section-kicker">Bloque 1.1</div>
+              <h2>Hoisting en JavaScript</h2>
+              <p class="section-lead">
+                Hoisting no significa que el codigo "suba" visualmente, sino que durante la fase
+                de preparacion el motor registra ciertas declaraciones antes de ejecutar linea a linea.
+              </p>
+            </div>
+          </div>
+
+          <div class="grid-two">
+            <article class="card-soft">
+              <h3 class="mini-title">Resumen practico</h3>
+              <ul class="check-list">
+                <li>Las <strong>function declarations</strong> se pueden usar antes de escribirlas.</li>
+                <li><span class="inline-code">var</span> existe antes, pero con valor <span class="inline-code">undefined</span>.</li>
+                <li><span class="inline-code">let</span> y <span class="inline-code">const</span> entran en zona muerta temporal hasta su declaracion.</li>
+              </ul>
+            </article>
+
+            <article class="card-warm">
+              <h3 class="mini-title">Peligro habitual</h3>
+              <p class="plain-text">
+                Leer una variable declarada con <span class="inline-code">let</span> antes de su linea
+                no devuelve <span class="inline-code">undefined</span>, sino un error.
+                Eso ayuda a detectar fallos antes.
+              </p>
+            </article>
+          </div>
+
+          <div class="demo-zone">
+            <div class="demo-toolbar">
+              <button type="button" id="hoistFunctionButton" class="button-brand">Hoisting con function</button>
+              <button type="button" id="hoistVarButton">Hoisting con var</button>
+              <button type="button" id="hoistLetButton">Hoisting con let</button>
+            </div>
+            <div class="demo-body">
+              <div class="result" id="hoistingResult">
+                Pulsa un boton para ver como cambia la salida segun el tipo de declaracion.
+              </div>
+            </div>
+          </div>
+
+          <pre><code>console.log(datoVar); // undefined
+var datoVar = "listo";
+
+console.log(datoLet); // ReferenceError
+let datoLet = "listo";
+
+saludar(); // funciona
+function saludar() {
+  console.log("hola");
+}</code></pre>
+
+          <!-- TODO Alumno:
+               Explica con tus palabras por que function declaration y function expression
+               no se comportan igual respecto a hoisting. -->
+        </section>
+
+        <!-- =========================================================
+        SECCION 2 - FORMAS DE ESCRIBIR DESDE JS EN HTML
+        ========================================================== -->
+        <section class="panel section-card" id="escritura-js">
+          <div class="section-head">
+            <div>
+              <div class="section-kicker">Bloque 2</div>
+              <h2>Formas de escribir desde JavaScript en un documento HTML</h2>
+              <p class="section-lead">
+                No todo "mostrar informacion" significa lo mismo. A veces quieres un aviso,
+                otras una traza de consola, otras insertar contenido en la pagina.
+              </p>
+            </div>
+          </div>
+
+          <div class="grid-two">
+            <article class="card-soft">
+              <h3 class="mini-title">Opciones frecuentes</h3>
+              <ul class="check-list">
+                <li><span class="inline-code">alert()</span>: mensaje emergente.</li>
+                <li><span class="inline-code">console.log()</span>: depuracion para desarrollador.</li>
+                <li><span class="inline-code">textContent</span> o <span class="inline-code">innerHTML</span>: escribir en el DOM.</li>
+                <li><span class="inline-code">document.write()</span>: historico, hoy casi nunca recomendado.</li>
+              </ul>
+            </article>
+
+            <article class="card-warm">
+              <h3 class="mini-title">Buena practica</h3>
+              <p class="plain-text">
+                Para explicar en clase es muy util combinar consola y resultado visual,
+                porque asi el alumno ve tanto la depuracion como el efecto final.
+              </p>
+            </article>
+          </div>
+
+          <div class="demo-zone">
+            <div class="demo-toolbar">
+              <input type="text" id="writeInput" value="Hola desde JavaScript" aria-label="Texto de prueba" />
+              <button type="button" id="alertWriteButton">Usar alert</button>
+              <button type="button" id="consoleWriteButton">Usar console.log</button>
+              <button type="button" class="button-brand" id="domWriteButton">Escribir en la pagina</button>
+              <button type="button" id="docWriteButton">Simular document.write</button>
+            </div>
+            <div class="demo-body">
+              <div class="result" id="writeResult">
+                Escribe algo en el input y prueba cada forma de mostrarlo.
+              </div>
+              <iframe class="sandbox-frame" id="writeFrame" title="Zona segura de document.write"></iframe>
+              <p class="demo-note">
+                La zona inferior usa un iframe vacio para demostrar <span class="inline-code">document.write()</span>
+                sin destruir toda esta pagina.
+              </p>
+            </div>
+          </div>
+
+          <pre><code>alert("Hola");
+console.log("Hola");
+document.getElementById("salida").textContent = "Hola";
+
+// Mejor evitar esto despues de que la pagina ya este cargada:
+document.write("Hola");</code></pre>
+
+          <!-- TODO Alumno:
+               Anade un quinto boton que escriba el texto como una lista li dentro del DOM. -->
+        </section>
+
+        <!-- =========================================================
+        SECCION 3 - CARGA DE SCRIPTS
+        ========================================================== -->
+        <section class="panel section-card" id="carga-scripts">
+          <div class="section-head">
+            <div>
+              <div class="section-kicker">Bloque 3</div>
+              <h2>Carga de scripts: normal, <span class="inline-code">defer</span>, <span class="inline-code">async</span>, <span class="inline-code">DOMContentLoaded</span> y <span class="inline-code">load</span></h2>
+              <p class="section-lead">
+                Este es uno de los bloques mas utiles para entender por que un archivo JS
+                funciona o falla segun cuando se ejecuta.
+              </p>
+            </div>
+          </div>
+
+          <div class="grid-two">
+            <article class="card-soft">
+              <h3 class="mini-title">Lectura rapida de cada modo</h3>
+              <ul class="check-list">
+                <li><strong>Normal:</strong> descarga y ejecuta, bloqueando el parseo del HTML.</li>
+                <li><strong>defer:</strong> descarga en paralelo y ejecuta al final, respetando el orden.</li>
+                <li><strong>async:</strong> descarga en paralelo y ejecuta en cuanto llega, sin garantizar orden.</li>
+              </ul>
+            </article>
+
+            <article class="card-warm">
+              <h3 class="mini-title">Eventos utiles</h3>
+              <ul class="check-list">
+                <li><span class="inline-code">DOMContentLoaded</span>: el DOM ya esta construido.</li>
+                <li><span class="inline-code">window.load</span>: DOM y recursos externos ya han terminado.</li>
+                <li>Para manipular el DOM, normalmente con <span class="inline-code">defer</span> o <span class="inline-code">DOMContentLoaded</span> basta.</li>
+              </ul>
+            </article>
+          </div>
+
+          <div class="demo-zone">
+            <div class="demo-toolbar">
+              <select id="loadModeSelect" aria-label="Selector de modo de carga">
+                <option value="normal">Script normal</option>
+                <option value="defer" selected>Script con defer</option>
+                <option value="async">Script con async</option>
+              </select>
+              <button type="button" class="button-brand" id="explainLoadModeButton">Explicar modo</button>
+              <button type="button" id="clearTimelineButton">Limpiar linea temporal</button>
+            </div>
+            <div class="demo-body">
+              <div class="result" id="loadModeResult">
+                Selecciona un modo y pulsa "Explicar modo" para comparar su comportamiento.
+              </div>
+              <div class="card-soft">
+                <h3 class="mini-title">Linea temporal real de esta pagina</h3>
+                <ol class="timeline" id="loadTimeline">
+                  <li>Esperando eventos...</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+
+          <pre><code>&lt;script src="app.js"&gt;&lt;/script&gt;
+&lt;script src="app.js" defer&gt;&lt;/script&gt;
+&lt;script src="app.js" async&gt;&lt;/script&gt;
+
+document.addEventListener("DOMContentLoaded", function () {
+  // El DOM ya esta listo
+});
+
+window.addEventListener("load", function () {
+  // DOM + imagenes + estilos + otros recursos ya cargaron
+});</code></pre>
+
+          <!-- TODO Alumno:
+               Busca un caso real donde async si tenga sentido y otro donde sea mala idea. -->
+        </section>
+
+        <!-- =========================================================
+        SECCION 4 - INNERHTML, INNERTEXT Y TEXTCONTENT
+        ========================================================== -->
+        <section class="panel section-card" id="comparacion-textos">
+          <div class="section-head">
+            <div>
+              <div class="section-kicker">Bloque 4</div>
+              <h2>Diferencia entre <span class="inline-code">innerHTML</span>, <span class="inline-code">innerText</span> y <span class="inline-code">textContent</span></h2>
+              <p class="section-lead">
+                Parecen parecidos, pero no hacen lo mismo. Esta comparacion es clave
+                cuando empiezas a modificar contenido desde JavaScript.
+              </p>
+            </div>
+          </div>
+
+          <div class="grid-two">
+            <article class="card-soft">
+              <h3 class="mini-title">Al escribir</h3>
+              <ul class="check-list">
+                <li><span class="inline-code">innerHTML</span> interpreta etiquetas HTML.</li>
+                <li><span class="inline-code">innerText</span> escribe texto visible, sin interpretar etiquetas.</li>
+                <li><span class="inline-code">textContent</span> escribe texto plano de forma directa.</li>
+              </ul>
+            </article>
+
+            <article class="card-warm">
+              <h3 class="mini-title">Al leer</h3>
+              <ul class="check-list">
+                <li><span class="inline-code">innerHTML</span> devuelve el HTML interno.</li>
+                <li><span class="inline-code">innerText</span> devuelve el texto visible renderizado.</li>
+                <li><span class="inline-code">textContent</span> devuelve todo el texto, incluso si hay nodos ocultos.</li>
+              </ul>
+            </article>
+          </div>
+
+          <div class="demo-zone">
+            <div class="demo-toolbar">
+              <input
+                type="text"
+                id="compareInput"
+                value="&lt;strong&gt;Hola&lt;/strong&gt; desde JS"
+                aria-label="Texto para comparar"
+              />
+              <button type="button" class="button-brand" id="setHtmlButton">Escribir con innerHTML</button>
+              <button type="button" id="setInnerTextButton">Escribir con innerText</button>
+              <button type="button" id="setTextContentButton">Escribir con textContent</button>
+            </div>
+            <div class="demo-body">
+              <div class="compare-output" id="compareTarget"></div>
+
+              <div class="source-box" id="compareSource">
+                Texto visible
+                <span>Texto oculto dentro de span</span>
+              </div>
+
+              <div class="demo-toolbar" style="padding: 0; border-bottom: 0; background: transparent;">
+                <button type="button" id="readHtmlButton">Leer innerHTML</button>
+                <button type="button" id="readInnerTextButton">Leer innerText</button>
+                <button type="button" id="readTextContentButton">Leer textContent</button>
+                <button type="button" id="toggleHiddenTextButton">Mostrar u ocultar span</button>
+              </div>
+
+              <div class="result" id="readCompareResult">
+                Aqui veras el valor devuelto al leer cada propiedad.
+              </div>
+            </div>
+          </div>
+
+          <pre><code>destino.innerHTML = "&lt;strong&gt;Hola&lt;/strong&gt;";
+destino.innerText = "&lt;strong&gt;Hola&lt;/strong&gt;";
+destino.textContent = "&lt;strong&gt;Hola&lt;/strong&gt;";
+
+console.log(origen.innerHTML);
+console.log(origen.innerText);
+console.log(origen.textContent);</code></pre>
+
+          <div class="tip-box">
+            <p>
+              <strong>Consejo de seguridad:</strong> si el contenido viene de un usuario,
+              evita <span class="inline-code">innerHTML</span> salvo que limpies antes la entrada.
+              Para texto normal, <span class="inline-code">textContent</span> suele ser la opcion mas segura.
+            </p>
+          </div>
+
+          <!-- TODO Alumno:
+               Prueba a escribir un enlace con innerHTML y luego con textContent.
+               Explica por que uno crea el enlace y el otro no. -->
+        </section>
+
+        <section class="panel footer-card">
+          Clase preparada para editar, explicar y practicar. Si quieres, el siguiente paso puede ser
+          crear una segunda version "solo ejercicios" a partir de esta teoria interactiva.
+        </section>
+      </main>
+    </div>
+  </div>
+  <script>
+    /*
+      ================================================================
+      SCRIPT PRINCIPAL DE LA CLASE
+      ================================================================
+      ! Este bloque se deja al final del body para que el DOM ya exista
+        cuando seleccionamos elementos.
+      * Asi evitamos errores tipicos de "no encuentra el elemento".
+    */
+
+    const refs = {
+      statusDom: document.getElementById("statusDom"),
+      statusLoad: document.getElementById("statusLoad"),
+      introButton: document.getElementById("introButton"),
+      introResult: document.getElementById("introResult"),
+      checkDomButton: document.getElementById("checkDomButton"),
+      scriptPlacementResult: document.getElementById("scriptPlacementResult"),
+      showVarButton: document.getElementById("showVarButton"),
+      showLetButton: document.getElementById("showLetButton"),
+      scopeResult: document.getElementById("scopeResult"),
+      hoistFunctionButton: document.getElementById("hoistFunctionButton"),
+      hoistVarButton: document.getElementById("hoistVarButton"),
+      hoistLetButton: document.getElementById("hoistLetButton"),
+      hoistingResult: document.getElementById("hoistingResult"),
+      writeInput: document.getElementById("writeInput"),
+      alertWriteButton: document.getElementById("alertWriteButton"),
+      consoleWriteButton: document.getElementById("consoleWriteButton"),
+      domWriteButton: document.getElementById("domWriteButton"),
+      docWriteButton: document.getElementById("docWriteButton"),
+      writeResult: document.getElementById("writeResult"),
+      writeFrame: document.getElementById("writeFrame"),
+      loadModeSelect: document.getElementById("loadModeSelect"),
+      explainLoadModeButton: document.getElementById("explainLoadModeButton"),
+      clearTimelineButton: document.getElementById("clearTimelineButton"),
+      loadModeResult: document.getElementById("loadModeResult"),
+      loadTimeline: document.getElementById("loadTimeline"),
+      compareInput: document.getElementById("compareInput"),
+      setHtmlButton: document.getElementById("setHtmlButton"),
+      setInnerTextButton: document.getElementById("setInnerTextButton"),
+      setTextContentButton: document.getElementById("setTextContentButton"),
+      compareTarget: document.getElementById("compareTarget"),
+      compareSource: document.getElementById("compareSource"),
+      readHtmlButton: document.getElementById("readHtmlButton"),
+      readInnerTextButton: document.getElementById("readInnerTextButton"),
+      readTextContentButton: document.getElementById("readTextContentButton"),
+      toggleHiddenTextButton: document.getElementById("toggleHiddenTextButton"),
+      readCompareResult: document.getElementById("readCompareResult")
+    };
+
+    const loadTimelineItems = [];
+    let hiddenTextVisible = true;
+
+    function nowLabel() {
+      return new Date().toLocaleTimeString("es-ES");
+    }
+
+    function pushTimeline(message) {
+      loadTimelineItems.push("[" + nowLabel() + "] " + message);
+      renderTimeline();
+    }
+
+    function renderTimeline() {
+      if (loadTimelineItems.length === 0) {
+        refs.loadTimeline.innerHTML = "<li>Linea temporal vacia.</li>";
+        return;
+      }
+
+      refs.loadTimeline.innerHTML = loadTimelineItems
+        .map(function (item) {
+          return "<li>" + item + "</li>";
+        })
+        .join("");
+    }
+
+    function safeText(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;");
+    }
+
+    refs.introButton.addEventListener("click", function () {
+      refs.introResult.innerHTML =
+        "<strong>Evento detectado.</strong> JavaScript ha actualizado esta caja a las " +
+        nowLabel() +
+        ".";
+    });
+
+    refs.checkDomButton.addEventListener("click", function () {
+      const existe = !!refs.scriptPlacementResult;
+      refs.scriptPlacementResult.innerHTML = existe
+        ? "<strong>Correcto:</strong> el elemento ya existe y puede manipularse. " +
+          "En esta pagina funciona porque el script esta al final del body."
+        : "El elemento todavia no existe.";
+    });
+
+    refs.showVarButton.addEventListener("click", function () {
+      let mensaje = "";
+
+      if (true) {
+        var curso = "JavaScript desde un bloque if";
+      }
+
+      mensaje += "Con var, la variable sigue existiendo fuera del bloque.\n";
+      mensaje += 'Resultado: "' + curso + '"\n';
+      mensaje += "Idea clave: var tiene alcance de funcion, no de bloque.";
+
+      refs.scopeResult.textContent = mensaje;
+    });
+
+    refs.showLetButton.addEventListener("click", function () {
+      let mensaje = "";
+
+      try {
+        if (true) {
+          let modulo = "DOM";
+        }
+
+        mensaje += modulo;
+      } catch (error) {
+        mensaje += "Con let, fuera del bloque aparece error.\n";
+        mensaje += "Error real: " + error.message + "\n";
+        mensaje += "Idea clave: let tiene alcance de bloque.";
+      }
+
+      refs.scopeResult.textContent = mensaje;
+    });
+
+    refs.hoistFunctionButton.addEventListener("click", function () {
+      const mensaje =
+        'La function declaration se puede invocar antes de su definicion.\n' +
+        "Resultado: " + saludarAntesDeDeclarar();
+
+      refs.hoistingResult.textContent = mensaje;
+    });
+
+    refs.hoistVarButton.addEventListener("click", function () {
+      let mensaje = "";
+
+      mensaje += "Antes de asignar, var existe pero vale undefined.\n";
+      mensaje += "Valor antes de la asignacion: " + valorHoisted + "\n";
+      var valorHoisted = "Ahora ya tiene contenido";
+      mensaje += "Valor despues de asignar: " + valorHoisted;
+
+      refs.hoistingResult.textContent = mensaje;
+    });
+
+    refs.hoistLetButton.addEventListener("click", function () {
+      let mensaje = "";
+
+      try {
+        mensaje += zonaTemporal;
+        let zonaTemporal = "Este texto no llega a usarse";
+        mensaje += zonaTemporal;
+      } catch (error) {
+        mensaje += "Con let no se puede leer la variable antes de declararla.\n";
+        mensaje += "Error real: " + error.message + "\n";
+        mensaje += "Esta franja se llama zona muerta temporal.";
+      }
+
+      refs.hoistingResult.textContent = mensaje;
+    });
+
+    function saludarAntesDeDeclarar() {
+      return "La funcion estaba disponible por hoisting.";
+    }
+
+    refs.alertWriteButton.addEventListener("click", function () {
+      const value = refs.writeInput.value.trim() || "(vacio)";
+      alert(value);
+      refs.writeResult.textContent = 'Se mostro alert("' + value + '").';
+    });
+
+    refs.consoleWriteButton.addEventListener("click", function () {
+      const value = refs.writeInput.value.trim() || "(vacio)";
+      console.log("Mensaje enviado desde la clase:", value);
+      refs.writeResult.textContent =
+        'Se envio el mensaje a consola. Abre F12 para verlo: "' + value + '".';
+    });
+
+    refs.domWriteButton.addEventListener("click", function () {
+      const value = refs.writeInput.value.trim() || "(vacio)";
+      refs.writeResult.innerHTML =
+        "<strong>Texto escrito en el DOM:</strong> " + safeText(value);
+    });
+
+    refs.docWriteButton.addEventListener("click", function () {
+      const value = refs.writeInput.value.trim() || "(vacio)";
+      const frameDocument = refs.writeFrame.contentWindow.document;
+
+      frameDocument.open();
+      frameDocument.write(
+        "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'><style>" +
+        "body{font-family:Trebuchet MS,Verdana,sans-serif;padding:16px;margin:0;" +
+        "background:#fff8ef;color:#243447}" +
+        "h3{font-family:Georgia,serif;margin-top:0}" +
+        "code{background:#fff;border:1px solid #e0d4c8;padding:2px 6px;border-radius:6px}" +
+        "</style></head><body>" +
+        "<h3>Salida de document.write()</h3>" +
+        "<p>Se ha escrito este contenido dentro del iframe.</p>" +
+        "<p><code>" + safeText(value) + "</code></p>" +
+        "</body></html>"
+      );
+      frameDocument.close();
+
+      refs.writeResult.textContent =
+        "document.write() puede reemplazar el documento activo si se usa tarde; por eso aqui se demuestra en una zona segura.";
+    });
+
+    refs.explainLoadModeButton.addEventListener("click", function () {
+      const mode = refs.loadModeSelect.value;
+      let explanation = "";
+
+      if (mode === "normal") {
+        explanation =
+          "Script normal: el navegador para de leer HTML, descarga el archivo y lo ejecuta en ese momento. " +
+          "Puede bloquear el render si el archivo tarda.";
+      } else if (mode === "defer") {
+        explanation =
+          "Script con defer: se descarga mientras el navegador sigue leyendo el HTML. " +
+          "Se ejecuta al terminar el parseo del DOM y mantiene el orden entre varios scripts defer.";
+      } else {
+        explanation =
+          "Script con async: se descarga en paralelo y se ejecuta en cuanto termina la descarga. " +
+          "No garantiza orden y puede dispararse antes o despues de que el DOM este listo.";
+      }
+
+      refs.loadModeResult.textContent = explanation;
+    });
+
+    refs.clearTimelineButton.addEventListener("click", function () {
+      loadTimelineItems.length = 0;
+      renderTimeline();
+    });
+
+    refs.setHtmlButton.addEventListener("click", function () {
+      refs.compareTarget.innerHTML = refs.compareInput.value;
+    });
+
+    refs.setInnerTextButton.addEventListener("click", function () {
+      refs.compareTarget.innerText = refs.compareInput.value;
+    });
+
+    refs.setTextContentButton.addEventListener("click", function () {
+      refs.compareTarget.textContent = refs.compareInput.value;
+    });
+
+    refs.readHtmlButton.addEventListener("click", function () {
+      refs.readCompareResult.textContent =
+        "innerHTML devuelve:\n" + refs.compareSource.innerHTML;
+    });
+
+    refs.readInnerTextButton.addEventListener("click", function () {
+      refs.readCompareResult.textContent =
+        "innerText devuelve:\n" + refs.compareSource.innerText;
+    });
+
+    refs.readTextContentButton.addEventListener("click", function () {
+      refs.readCompareResult.textContent =
+        "textContent devuelve:\n" + refs.compareSource.textContent;
+    });
+
+    refs.toggleHiddenTextButton.addEventListener("click", function () {
+      hiddenTextVisible = !hiddenTextVisible;
+      refs.compareSource.classList.toggle("is-hidden", !hiddenTextVisible);
+      refs.readCompareResult.textContent =
+        hiddenTextVisible
+          ? "El span vuelve a estar visible. Ahora compara innerText y textContent."
+          : "El span se ha ocultado con CSS. Ahora innerText y textContent ya no muestran lo mismo.";
+    });
+
+    pushTimeline("El script principal se ha ejecutado.");
+
+    document.addEventListener("DOMContentLoaded", function () {
+      refs.statusDom.textContent = "DOMContentLoaded completado";
+      pushTimeline("DOMContentLoaded: el DOM ya esta construido.");
+    });
+
+    window.addEventListener("load", function () {
+      refs.statusLoad.textContent = "window load completado";
+      pushTimeline("window load: recursos externos terminados.");
+    });
+
+    refs.compareTarget.textContent =
+      "Aqui aparecera el contenido escrito con innerHTML, innerText o textContent.";
+  </script>
+</body>
+</html>
