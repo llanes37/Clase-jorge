@@ -1,0 +1,369 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laboratorio de Bases de Datos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-shell" id="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <button class="icon-btn" id="btn-hide-sidebar" title="Ocultar lateral">&#9664;</button>
+        <div class="brand-kicker">Motor reutilizable</div>
+        <h1>Laboratorio de Bases de Datos</h1>
+        <p>Carga scripts SQL o bases SQLite, explora tablas, ejecuta consultas y vuelve a cero cuando quieras.</p>
+      </div>
+
+      <section class="sidebar-section">
+        <label class="field-label" for="table-filter">Buscar tabla</label>
+        <input id="table-filter" class="text-input" type="text" placeholder="Ejemplo: clientes">
+      </section>
+
+      <section class="sidebar-section sidebar-panel">
+        <div class="section-title-row">
+          <h2>Tablas detectadas</h2>
+          <span class="section-meta" id="tables-count">0</span>
+        </div>
+        <div class="table-list" id="table-list">
+          <div class="empty-block">Todavia no hay tablas. Carga un script o una base SQLite.</div>
+        </div>
+      </section>
+    </aside>
+
+    <main class="workspace" id="workspace">
+      <button class="icon-btn floating-toggle sidebar-toggle" id="btn-show-sidebar" title="Mostrar lateral">&#9654;</button>
+      <button class="icon-btn floating-toggle info-toggle" id="btn-show-info" title="Mostrar lateral derecho">&#9664;</button>
+
+      <header class="topbar">
+        <div class="topbar-main">
+          <div class="title-block">
+            <h2>Cliente SQLite en navegador</h2>
+            <p id="topbar-subtitle">Base vacia inicializada. Puedes cargar un script SQL, abrir una base .sqlite o pegar un script manualmente.</p>
+          </div>
+          <div class="layout-tools">
+            <button class="btn secondary has-tooltip" id="btn-open-help" data-tooltip="Abre una guia completa para entender el laboratorio y ver ejemplos listos para usar.">Ayuda</button>
+            <button class="btn has-tooltip" id="btn-toggle-status" data-tooltip="Muestra u oculta las tarjetas de estado del motor, la base y la ultima ejecucion.">Ocultar estado</button>
+            <button class="btn has-tooltip" id="btn-toggle-info" data-tooltip="Muestra u oculta la columna derecha con tabla activa, historial y materiales.">Ocultar lateral derecho</button>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <button class="btn has-tooltip" id="btn-new-empty" data-tooltip="Crea una base vacia y limpia para empezar desde cero.">Nueva base vacia</button>
+          <button class="btn secondary has-tooltip" id="btn-load-sql" data-tooltip="Carga un archivo .sql y crea una base nueva con sus tablas y datos.">Cargar script SQL</button>
+          <button class="btn secondary has-tooltip" id="btn-paste-sql" data-tooltip="Pega manualmente un script SQL para crear o ampliar una base.">Pegar script SQL</button>
+          <button class="btn secondary has-tooltip" id="btn-apply-sql" data-tooltip="Ejecuta un .sql encima de la base actual sin reemplazarla.">Ejecutar script sobre base actual</button>
+          <button class="btn secondary has-tooltip" id="btn-load-db" data-tooltip="Abre una base ya existente en formato .db o .sqlite.">Abrir base SQLite</button>
+          <button class="btn has-tooltip" id="btn-load-demo" data-tooltip="Carga una base de ejemplo para practicar al instante.">Cargar demo</button>
+          <button class="btn secondary has-tooltip" id="btn-open-practices" data-tooltip="Abre una lista de ejercicios asociados a la muestra cargada." disabled>Practicar muestra</button>
+          <button class="btn secondary has-tooltip" id="btn-load-material" data-tooltip="Carga un PDF, Markdown, HTML o TXT como material de apoyo dentro del laboratorio.">Cargar material</button>
+          <button class="btn has-tooltip" id="btn-clear-material" data-tooltip="Quita el material de apoyo que este cargado en este momento.">Limpiar material</button>
+          <button class="btn has-tooltip" id="btn-open-schema" data-tooltip="Muestra un esquema visual con tablas y relaciones detectadas.">Ver esquema</button>
+          <button class="btn success has-tooltip" id="btn-reset-db" data-tooltip="Vuelve al estado original del ultimo archivo o script cargado.">Resetear</button>
+          <button class="btn danger has-tooltip" id="btn-clear-all" data-tooltip="Vacía la sesion actual y deja el laboratorio con una base limpia.">Borrar todo</button>
+          <button class="btn primary has-tooltip" id="btn-export-db" data-tooltip="Descarga la base actual en un archivo SQLite.">Exportar DB</button>
+        </div>
+
+        <input id="input-sql-load" type="file" accept=".sql,text/sql" hidden>
+        <input id="input-sql-apply" type="file" accept=".sql,text/sql" hidden>
+        <input id="input-db-load" type="file" accept=".sqlite,.db,.sqlite3,application/octet-stream" hidden>
+        <input id="input-material-load" type="file" accept=".pdf,.md,.markdown,.txt,.html,.htm,text/plain,text/markdown,text/html,application/pdf" hidden>
+      </header>
+
+      <section class="status-grid-wrap">
+        <div class="status-grid-head">
+          <strong>Estado actual</strong>
+          <button class="icon-btn has-tooltip" id="btn-hide-status" title="Ocultar estado" data-tooltip="Oculta este bloque de tarjetas de estado para ganar espacio.">&#9650;</button>
+        </div>
+        <div class="status-grid">
+          <article class="status-card">
+            <span>Estado motor</span>
+            <strong id="engine-status">Inicializando...</strong>
+            <small id="engine-status-detail">Cargando SQLite en WebAssembly.</small>
+          </article>
+          <article class="status-card">
+            <span>Base origen</span>
+            <strong id="source-name">Base vacia</strong>
+            <small id="source-kind">Sin archivo cargado</small>
+          </article>
+          <article class="status-card">
+            <span>Scripts anadidos</span>
+            <strong id="applied-count">0</strong>
+            <small id="applied-detail">Ningun script aplicado encima de la base origen.</small>
+          </article>
+          <article class="status-card">
+            <span>Ultima ejecucion</span>
+            <strong id="last-run-status">Sin consultas</strong>
+            <small id="last-run-detail">El editor esta listo para ejecutar SQL.</small>
+          </article>
+        </div>
+      </section>
+
+      <section class="main-grid" id="main-grid">
+        <div class="main-column">
+          <section class="panel editor-panel" id="editor-panel">
+            <div class="panel-header">
+              <div>
+                <h3>Editor SQL</h3>
+                <div class="panel-subtitle" id="editor-status">Usa Ctrl + Enter para ejecutar la seleccion. Usa Ctrl + Shift + Enter para ejecutar todo el editor.</div>
+              </div>
+              <div class="panel-actions">
+                <button class="btn secondary has-tooltip" id="btn-run-selection" data-tooltip="Ejecuta solo el texto seleccionado. Si no seleccionas nada, usa el contenido visible.">Ejecutar seleccion</button>
+                <button class="btn primary has-tooltip" id="btn-run-editor" data-tooltip="Ejecuta todo el contenido del editor SQL.">Ejecutar editor</button>
+                <button class="btn has-tooltip" id="btn-clear-editor" data-tooltip="Borra el contenido del editor sin tocar la base cargada.">Limpiar editor</button>
+                <button class="icon-btn panel-toggle has-tooltip" data-panel="editor-panel" title="Plegar editor" data-tooltip="Pliega o despliega el editor SQL.">&#9650;</button>
+              </div>
+            </div>
+            <div class="editor-wrap">
+              <textarea id="sql-editor" spellcheck="false" placeholder="Ejemplo:
+SELECT name
+FROM sqlite_master
+WHERE type = 'table'
+ORDER BY name;"></textarea>
+            </div>
+          </section>
+
+          <section class="panel results-panel" id="results-panel">
+            <div class="panel-header">
+              <div>
+                <h3>Resultados</h3>
+                <div class="panel-subtitle">Mensajes, tablas devueltas y diagnostico de errores.</div>
+              </div>
+              <div class="panel-actions">
+                <button class="icon-btn panel-toggle has-tooltip" data-panel="results-panel" title="Plegar resultados" data-tooltip="Pliega o despliega el panel de resultados.">&#9650;</button>
+              </div>
+            </div>
+            <div class="results-body" id="results-body">
+              <div class="message info">El laboratorio esta listo. Carga una base o un script para empezar a trabajar.</div>
+            </div>
+          </section>
+        </div>
+
+        <aside class="info-column">
+          <section class="panel info-panel" id="inspector-panel">
+            <div class="panel-header">
+              <div>
+                <h3>Tabla activa</h3>
+                <div class="panel-subtitle">Selecciona una tabla del lateral para inspeccionarla.</div>
+              </div>
+              <div class="panel-actions">
+                <button class="icon-btn panel-toggle has-tooltip" data-panel="inspector-panel" title="Plegar inspector" data-tooltip="Pliega o despliega la informacion de la tabla activa.">&#9650;</button>
+              </div>
+            </div>
+            <div class="info-body" id="table-inspector">
+              <div class="empty-block">Aqui apareceran las columnas y el volumen de la tabla seleccionada.</div>
+            </div>
+          </section>
+
+          <section class="panel info-panel" id="history-panel">
+            <div class="panel-header">
+              <div>
+                <h3>Recursos</h3>
+                <div class="panel-subtitle">Historial y materiales opcionales alrededor del motor.</div>
+              </div>
+              <div class="panel-actions side-tabs">
+                <button class="btn secondary side-tab active has-tooltip" data-side-tab="history" data-tooltip="Muestra las ultimas consultas ejecutadas para recuperarlas rapido.">Historial</button>
+                <button class="btn secondary side-tab has-tooltip" data-side-tab="material" data-tooltip="Muestra el material de apoyo que hayas cargado en el laboratorio.">Material</button>
+                <button class="icon-btn panel-toggle has-tooltip" data-panel="history-panel" title="Plegar historial" data-tooltip="Pliega o despliega el panel de recursos.">&#9650;</button>
+              </div>
+            </div>
+            <div class="info-body side-tab-body active" id="history-list">
+              <div class="empty-block">Todavia no hay consultas en el historial.</div>
+            </div>
+            <div class="info-body side-tab-body" id="material-view">
+              <div class="empty-block">Carga un PDF, Markdown, HTML o TXT para tener material de apoyo dentro del laboratorio.</div>
+            </div>
+          </section>
+        </aside>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="schema-modal">
+    <div class="modal-card modal-wide">
+      <div class="panel-header">
+        <div>
+          <h3>Esquema visual de la base</h3>
+          <div class="panel-subtitle">Relaciones detectadas en la base cargada actualmente.</div>
+        </div>
+        <button class="btn" id="btn-close-schema">Cerrar</button>
+      </div>
+      <div class="schema-body">
+        <div id="mermaid-root"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="paste-modal">
+    <div class="modal-card">
+      <div class="panel-header">
+        <div>
+          <h3>Pegar script SQL</h3>
+          <div class="panel-subtitle">Puedes sustituir la base actual o ejecutar el script sobre la sesion abierta.</div>
+        </div>
+        <button class="btn" id="btn-close-paste">Cerrar</button>
+      </div>
+      <div class="modal-body">
+        <label class="field-label" for="pasted-script">Contenido del script</label>
+        <textarea id="pasted-script" class="script-textarea" spellcheck="false" placeholder="Pega aqui un CREATE TABLE, INSERT, ALTER, etc."></textarea>
+        <div class="modal-actions">
+          <button class="btn secondary" id="btn-run-pasted-replace">Cargar como base nueva</button>
+          <button class="btn primary" id="btn-run-pasted-apply">Ejecutar sobre base actual</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="help-modal">
+    <div class="modal-card modal-help">
+      <div class="panel-header">
+        <div>
+          <h3>Ayuda del laboratorio</h3>
+          <div class="panel-subtitle">Que hace cada boton, como empezar y cual es el flujo mas util para practicar SQL aqui.</div>
+        </div>
+        <button class="btn" id="btn-close-help">Cerrar</button>
+      </div>
+      <div class="modal-body help-body">
+        <section class="help-section">
+          <h4>1. La forma mas rapida de empezar</h4>
+          <ol class="help-list">
+            <li>Si tu profesor te da un `.sql`, pulsa <strong>Cargar script SQL</strong>.</li>
+            <li>Si te da una base ya hecha, pulsa <strong>Abrir base SQLite</strong>.</li>
+            <li>Si no tienes nada aun, pulsa <strong>Cargar demo</strong> para probar el entorno.</li>
+            <li>Cuando la carga termine, las tablas apareceran en la columna izquierda.</li>
+            <li>Pulsa una tabla del lateral para que el sistema te escriba una consulta base en el editor.</li>
+          </ol>
+        </section>
+
+        <section class="help-section">
+          <h4>2. Que hace cada boton importante</h4>
+          <div class="help-button-grid">
+            <article class="help-button-card">
+              <strong>Nueva base vacia</strong>
+              <p>Borra la base actual y deja el laboratorio limpio para construir una desde cero.</p>
+            </article>
+            <article class="help-button-card">
+              <strong>Cargar script SQL</strong>
+              <p>Lee un archivo `.sql` y crea una base nueva con sus tablas y datos.</p>
+            </article>
+            <article class="help-button-card">
+              <strong>Pegar script SQL</strong>
+              <p>Sirve para pegar `CREATE TABLE`, `INSERT` o cualquier script sin necesidad de archivo.</p>
+            </article>
+            <article class="help-button-card">
+              <strong>Ejecutar script sobre base actual</strong>
+              <p>Anade nuevas tablas o datos encima de la base que ya tienes abierta.</p>
+            </article>
+            <article class="help-button-card">
+              <strong>Abrir base SQLite</strong>
+              <p>Abre un archivo `.db`, `.sqlite` o similar sin convertirlo antes.</p>
+            </article>
+            <article class="help-button-card">
+              <strong>Resetear</strong>
+              <p>Vuelve al estado original del ultimo archivo o script cargado.</p>
+            </article>
+            <article class="help-button-card">
+              <strong>Borrar todo</strong>
+              <p>Vuelve a una base vacia para empezar desde cero.</p>
+            </article>
+            <article class="help-button-card">
+              <strong>Ver esquema</strong>
+              <p>Muestra las tablas y sus relaciones para entender la estructura de la base.</p>
+            </article>
+            <article class="help-button-card">
+              <strong>Ejecutar seleccion</strong>
+              <p>Ejecuta solo la parte marcada del editor. Muy util si tienes varias consultas.</p>
+            </article>
+            <article class="help-button-card">
+              <strong>Ejecutar editor</strong>
+              <p>Ejecuta todo el contenido del editor tal como esta escrito.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="help-section">
+          <h4>3. Flujo recomendado para un alumno</h4>
+          <ol class="help-list">
+            <li>Carga la base del ejercicio.</li>
+            <li>Comprueba que las tablas aparezcan a la izquierda.</li>
+            <li>Pulsa una tabla para ver datos reales y entender sus columnas.</li>
+            <li>Escribe tu consulta en el editor.</li>
+            <li>Lee el panel de resultados: ahi salen tablas, errores y diagnostico.</li>
+            <li>Si rompes algo, usa <strong>Resetear</strong>.</li>
+          </ol>
+        </section>
+
+        <section class="help-section">
+          <h4>4. Ejemplos listos para copiar al editor</h4>
+          <div class="help-sql-grid">
+            <button class="help-sql-card" data-help-sql="SELECT name FROM sqlite_master WHERE type = 'table' ORDER BY name;">
+              <strong>Ver todas las tablas</strong>
+              <pre>SELECT name
+FROM sqlite_master
+WHERE type = 'table'
+ORDER BY name;</pre>
+            </button>
+            <button class="help-sql-card" data-help-sql="SELECT *\nFROM tabla_ejemplo\nLIMIT 25;">
+              <strong>Ver una tabla concreta</strong>
+              <pre>SELECT *
+FROM tabla_ejemplo
+LIMIT 25;</pre>
+            </button>
+            <button class="help-sql-card" data-help-sql="SELECT columna1, columna2\nFROM tabla_ejemplo\nWHERE condicion;">
+              <strong>Plantilla de consulta basica</strong>
+              <pre>SELECT columna1, columna2
+FROM tabla_ejemplo
+WHERE condicion;</pre>
+            </button>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="practices-modal">
+    <div class="modal-card modal-help">
+      <div class="panel-header">
+        <div>
+          <h3 id="practices-title">Practicas de la muestra</h3>
+          <div class="panel-subtitle" id="practices-subtitle">Ejercicios guiados para trabajar sobre la muestra cargada.</div>
+        </div>
+        <button class="btn" id="btn-close-practices">Cerrar</button>
+      </div>
+      <div class="modal-body help-body">
+        <div id="practices-list">
+          <div class="empty-block">No hay practicas disponibles para la base actual.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="demo-modal">
+    <div class="modal-card modal-help">
+      <div class="panel-header">
+        <div>
+          <h3>Seleccionar demo</h3>
+          <div class="panel-subtitle">Elige una base de ejemplo lista para practicar y explorar el laboratorio.</div>
+        </div>
+        <button class="btn" id="btn-close-demo-modal">Cerrar</button>
+      </div>
+      <div class="modal-body help-body">
+        <div class="demo-grid" id="demo-list">
+          <div class="empty-block">No hay demos disponibles.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <script src="js/app.js"></script>
+</body>
+</html>
+

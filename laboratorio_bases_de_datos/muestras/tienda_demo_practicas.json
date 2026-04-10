@@ -1,0 +1,97 @@
+{
+  "id": "tienda_demo",
+  "title": "Practicas basicas - tienda demo",
+  "description": "Ejercicios guiados para practicar SQL basico sobre una tienda online.",
+  "items": [
+    {
+      "id": "clientes_todos",
+      "level": "Basico",
+      "title": "Ver todos los clientes",
+      "statement": "Muestra todas las columnas de la tabla clientes.",
+      "focus": ["SELECT", "FROM"],
+      "template": "SELECT *\nFROM \"clientes\";",
+      "solution": "SELECT *\nFROM \"clientes\";"
+    },
+    {
+      "id": "productos_precio",
+      "level": "Basico",
+      "title": "Productos caros",
+      "statement": "Muestra nombre y precio de los productos con precio mayor de 100.",
+      "focus": ["WHERE", ">"],
+      "template": "SELECT nombre, precio\nFROM \"productos\"\nWHERE precio > 100;",
+      "solution": "SELECT nombre, precio\nFROM \"productos\"\nWHERE precio > 100;"
+    },
+    {
+      "id": "productos_stock",
+      "level": "Basico",
+      "title": "Ordenar por stock",
+      "statement": "Muestra nombre y stock de los productos ordenados de mayor a menor stock.",
+      "focus": ["ORDER BY", "DESC"],
+      "template": "SELECT nombre, stock\nFROM \"productos\"\nORDER BY stock DESC;",
+      "solution": "SELECT nombre, stock\nFROM \"productos\"\nORDER BY stock DESC;"
+    },
+    {
+      "id": "clientes_sin_email",
+      "level": "Basico",
+      "title": "Clientes sin email",
+      "statement": "Encuentra los clientes cuyo email sea NULL.",
+      "focus": ["IS NULL"],
+      "template": "SELECT nombre, email\nFROM \"clientes\"\nWHERE email IS NULL;",
+      "solution": "SELECT nombre, email\nFROM \"clientes\"\nWHERE email IS NULL;"
+    },
+    {
+      "id": "pedidos_estado",
+      "level": "Basico",
+      "title": "Pedidos no entregados",
+      "statement": "Muestra los pedidos cuyo estado no sea entregado.",
+      "focus": ["WHERE", "<>"],
+      "template": "SELECT id_pedido, estado\nFROM \"pedidos\"\nWHERE estado <> 'entregado';",
+      "solution": "SELECT id_pedido, estado\nFROM \"pedidos\"\nWHERE estado <> 'entregado';"
+    },
+    {
+      "id": "pedidos_clientes",
+      "level": "Intermedio",
+      "title": "Pedidos con cliente",
+      "statement": "Muestra el nombre del cliente y la fecha de pedido de cada pedido.",
+      "focus": ["JOIN"],
+      "template": "SELECT c.nombre, p.fecha_pedido\nFROM \"pedidos\" p\nJOIN \"clientes\" c ON c.id_cliente = p.id_cliente;",
+      "solution": "SELECT c.nombre, p.fecha_pedido\nFROM \"pedidos\" p\nJOIN \"clientes\" c ON c.id_cliente = p.id_cliente;"
+    },
+    {
+      "id": "productos_categoria",
+      "level": "Intermedio",
+      "title": "Producto y categoria",
+      "statement": "Muestra el nombre de cada producto junto a su categoria.",
+      "focus": ["JOIN", "alias"],
+      "template": "SELECT p.nombre, c.nombre AS categoria\nFROM \"productos\" p\nJOIN \"categorias_producto\" c ON c.id_categoria = p.id_categoria;",
+      "solution": "SELECT p.nombre, c.nombre AS categoria\nFROM \"productos\" p\nJOIN \"categorias_producto\" c ON c.id_categoria = p.id_categoria;"
+    },
+    {
+      "id": "conteo_pedidos_estado",
+      "level": "Intermedio",
+      "title": "Contar pedidos por estado",
+      "statement": "Cuenta cuántos pedidos hay en cada estado.",
+      "focus": ["COUNT", "GROUP BY"],
+      "template": "SELECT estado, COUNT(*) AS total\nFROM \"pedidos\"\nGROUP BY estado;",
+      "solution": "SELECT estado, COUNT(*) AS total\nFROM \"pedidos\"\nGROUP BY estado;"
+    },
+    {
+      "id": "total_linea",
+      "level": "Intermedio",
+      "title": "Calcular total por linea",
+      "statement": "Muestra cada linea de pedido con cantidad, precio_unitario y el total de la linea.",
+      "focus": ["operaciones"],
+      "template": "SELECT id_linea, cantidad, precio_unitario, cantidad * precio_unitario AS total_linea\nFROM \"lineas_pedido\";",
+      "solution": "SELECT id_linea, cantidad, precio_unitario, cantidad * precio_unitario AS total_linea\nFROM \"lineas_pedido\";"
+    },
+    {
+      "id": "importe_pedidos",
+      "level": "Intermedio",
+      "title": "Importe por pedido",
+      "statement": "Calcula el importe total de cada pedido sumando sus lineas.",
+      "focus": ["SUM", "GROUP BY", "JOIN"],
+      "template": "SELECT p.id_pedido, SUM(lp.cantidad * lp.precio_unitario) AS total_pedido\nFROM \"pedidos\" p\nJOIN \"lineas_pedido\" lp ON lp.id_pedido = p.id_pedido\nGROUP BY p.id_pedido;",
+      "solution": "SELECT p.id_pedido, SUM(lp.cantidad * lp.precio_unitario) AS total_pedido\nFROM \"pedidos\" p\nJOIN \"lineas_pedido\" lp ON lp.id_pedido = p.id_pedido\nGROUP BY p.id_pedido;"
+    }
+  ]
+}

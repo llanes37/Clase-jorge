@@ -1,0 +1,115 @@
+{
+  "id": "biblioteca_demo",
+  "title": "Practicas basicas - biblioteca demo",
+  "description": "Ejercicios guiados para practicar lo basico de SQL sobre la muestra de biblioteca.",
+  "items": [
+    {
+      "id": "socios_todos",
+      "level": "Basico",
+      "title": "Ver todos los socios",
+      "statement": "Muestra todas las columnas de la tabla socios.",
+      "focus": ["SELECT", "FROM"],
+      "template": "SELECT *\nFROM \"socios\";",
+      "solution": "SELECT *\nFROM \"socios\";"
+    },
+    {
+      "id": "socios_nombre_ciudad",
+      "level": "Basico",
+      "title": "Nombre y ciudad de socios",
+      "statement": "Muestra solo nombre y ciudad de todos los socios.",
+      "focus": ["SELECT columnas"],
+      "template": "SELECT nombre, ciudad\nFROM \"socios\";",
+      "solution": "SELECT nombre, ciudad\nFROM \"socios\";"
+    },
+    {
+      "id": "socios_madrid",
+      "level": "Basico",
+      "title": "Filtrar por ciudad",
+      "statement": "Muestra los socios cuya ciudad sea Madrid.",
+      "focus": ["WHERE", "TEXT"],
+      "template": "SELECT nombre, ciudad\nFROM \"socios\"\nWHERE ciudad = 'Madrid';",
+      "solution": "SELECT nombre, ciudad\nFROM \"socios\"\nWHERE ciudad = 'Madrid';"
+    },
+    {
+      "id": "email_nulo",
+      "level": "Basico",
+      "title": "Buscar valores nulos",
+      "statement": "Encuentra los socios cuyo email este vacio o sea NULL.",
+      "focus": ["IS NULL"],
+      "template": "SELECT nombre, email\nFROM \"socios\"\nWHERE email IS NULL;",
+      "solution": "SELECT nombre, email\nFROM \"socios\"\nWHERE email IS NULL;"
+    },
+    {
+      "id": "libros_paginas",
+      "level": "Basico",
+      "title": "Filtrar libros por paginas",
+      "statement": "Muestra titulo y paginas de los libros con mas de 300 paginas.",
+      "focus": [">", "WHERE"],
+      "template": "SELECT titulo, paginas\nFROM \"libros\"\nWHERE paginas > 300;",
+      "solution": "SELECT titulo, paginas\nFROM \"libros\"\nWHERE paginas > 300;"
+    },
+    {
+      "id": "libros_orden",
+      "level": "Basico",
+      "title": "Ordenar resultados",
+      "statement": "Muestra titulo y anio_publicacion de los libros, del mas reciente al mas antiguo.",
+      "focus": ["ORDER BY", "DESC"],
+      "template": "SELECT titulo, anio_publicacion\nFROM \"libros\"\nORDER BY anio_publicacion DESC;",
+      "solution": "SELECT titulo, anio_publicacion\nFROM \"libros\"\nORDER BY anio_publicacion DESC;"
+    },
+    {
+      "id": "prestamos_abiertos",
+      "level": "Basico",
+      "title": "Prestamos abiertos",
+      "statement": "Muestra los prestamos cuyo estado sea abierto.",
+      "focus": ["WHERE"],
+      "template": "SELECT *\nFROM \"prestamos\"\nWHERE estado = 'abierto';",
+      "solution": "SELECT *\nFROM \"prestamos\"\nWHERE estado = 'abierto';"
+    },
+    {
+      "id": "libros_disponibles",
+      "level": "Basico",
+      "title": "Libros disponibles",
+      "statement": "Muestra titulo y disponible de los libros que esten disponibles.",
+      "focus": ["INTEGER booleano"],
+      "template": "SELECT titulo, disponible\nFROM \"libros\"\nWHERE disponible = 1;",
+      "solution": "SELECT titulo, disponible\nFROM \"libros\"\nWHERE disponible = 1;"
+    },
+    {
+      "id": "prestamos_con_socios",
+      "level": "Intermedio",
+      "title": "Unir prestamos con socios",
+      "statement": "Muestra el nombre del socio y la fecha de prestamo de cada prestamo.",
+      "focus": ["JOIN"],
+      "template": "SELECT s.nombre, p.fecha_prestamo\nFROM \"prestamos\" p\nJOIN \"socios\" s ON s.id_socio = p.id_socio;",
+      "solution": "SELECT s.nombre, p.fecha_prestamo\nFROM \"prestamos\" p\nJOIN \"socios\" s ON s.id_socio = p.id_socio;"
+    },
+    {
+      "id": "libros_con_autores",
+      "level": "Intermedio",
+      "title": "Libros con autores",
+      "statement": "Muestra el titulo de cada libro junto con el nombre de su autor.",
+      "focus": ["JOIN", "alias"],
+      "template": "SELECT l.titulo, a.nombre AS autor\nFROM \"libros\" l\nJOIN \"autores\" a ON a.id_autor = l.id_autor;",
+      "solution": "SELECT l.titulo, a.nombre AS autor\nFROM \"libros\" l\nJOIN \"autores\" a ON a.id_autor = l.id_autor;"
+    },
+    {
+      "id": "conteo_prestamos",
+      "level": "Intermedio",
+      "title": "Contar prestamos por estado",
+      "statement": "Cuenta cuantos prestamos hay por cada estado.",
+      "focus": ["COUNT", "GROUP BY"],
+      "template": "SELECT estado, COUNT(*) AS total\nFROM \"prestamos\"\nGROUP BY estado;",
+      "solution": "SELECT estado, COUNT(*) AS total\nFROM \"prestamos\"\nGROUP BY estado;"
+    },
+    {
+      "id": "conteo_libros_categoria",
+      "level": "Intermedio",
+      "title": "Contar libros por categoria",
+      "statement": "Muestra cada categoria y cuantos libros tiene.",
+      "focus": ["JOIN", "COUNT", "GROUP BY"],
+      "template": "SELECT c.nombre, COUNT(*) AS total_libros\nFROM \"libros\" l\nJOIN \"categorias\" c ON c.id_categoria = l.id_categoria\nGROUP BY c.nombre;",
+      "solution": "SELECT c.nombre, COUNT(*) AS total_libros\nFROM \"libros\" l\nJOIN \"categorias\" c ON c.id_categoria = l.id_categoria\nGROUP BY c.nombre;"
+    }
+  ]
+}
