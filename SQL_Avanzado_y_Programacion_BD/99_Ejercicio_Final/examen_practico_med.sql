@@ -1,0 +1,66 @@
+-- #############################################################
+-- 📋 EXAMEN PRÁCTICO MEDIO: SQL + LÓGICA
+-- #############################################################
+
+-- Instrucciones:
+-- Completa cada sección escribiendo el código SQL solicitado.
+-- Solo se permiten comentarios (--) y sentencias SQL. No uses PL/pgSQL, solo MySQL.
+-- Indica tu nombre y la fecha en encabezado cuando envíes el examen.
+
+-- #############################################################
+-- SECCIÓN 1: SELECT y LÓGICA (30 puntos)
+-- #############################################################
+-- 1. Consulta el nombre y un campo calculado 'nivel_salario' que clasifique:
+--    'Bajo' (< 1200), 'Medio' (1200–1800), 'Alto' (> 1800).
+--    (10 puntos)
+--
+-- 2. Lista los clientes cuyo email termine en '@example.com',
+--    mostrando nombre y email.
+--    (10 puntos)
+--
+-- 3. Cuenta el número de empleados por departamento (department_id),
+--    y muestra solo los departamentos con más de 2 empleados.
+--    Incluye columnas: department_id, total_empleados.
+--    (10 puntos)
+
+-- #############################################################
+-- SECCIÓN 2: PROCEDIMIENTOS ALMACENADOS (25 puntos)
+-- #############################################################
+-- 1. Crea un procedimiento almacenado 'ListarEmpleadosRangoSalario' que:
+--    - Reciba dos parámetros IN: min_sal DECIMAL, max_sal DECIMAL.
+--    - Devuelva id, nombre y salario de empleados con salario entre min_sal y max_sal.
+--    (12 puntos)
+--
+-- 2. Crea un procedimiento almacenado 'InsertarDepartamento' que:
+--    - Reciba un parámetro IN nombre_depto VARCHAR(100).
+--    - Inserte en departamentos(nombre), validando que no exista duplicado
+--      (usa SIGNAL para error).
+--    (13 puntos)
+
+-- #############################################################
+-- SECCIÓN 3: CURSORES (20 puntos)
+-- #############################################################
+-- 1. Crea un procedimiento 'ProcesarClientes' que:
+--    - Declare un cursor sobre SELECT id, nombre, email FROM clientes.
+--    - Recorra cada fila y actualice un campo ficticio (p.ej. 'estado' = 'OK').
+--    - Cierre el cursor al finalizar.
+--    (10 puntos)
+--
+-- 2. Escribe un pseudocódigo Java que simule la obtención de un ResultSet
+--    para 'SELECT id, nombre FROM empleados ORDER BY id' usando while(rs.next()).
+--    (10 puntos)
+
+-- #############################################################
+-- SECCIÓN 4: TRIGGERS (25 puntos)
+-- #############################################################
+-- 1. Define un trigger 'trg_prevent_delete_cliente' BEFORE DELETE ON clientes
+--    que evite el borrado directo (usa SIGNAL).
+--    (12 puntos)
+--
+-- 2. Define un trigger 'trg_audit_update_salario' AFTER UPDATE ON empleados
+--    que registre cada cambio de salario en tabla empleados_log (id, old, new, timestamp).
+--    (13 puntos)
+
+-- #############################################################
+-- TOTAL: 100 puntos
+-- #############################################################
